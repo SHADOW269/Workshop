@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sakshith C Shetty — Offensive Security Engineer Workspace</title>
+  <meta name="description" content="Interactive VS Code & Cyber Terminal Workspace portfolio of Sakshith C Shetty (SHADOW-269) — Penetration Tester & Bug Bounty Hunter.">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Sakshith C Shetty — Developer & Security Workspace">
+  <meta property="og:description" content="Exploiting access control failures, business logic flaws, and microservice vulnerabilities.">
+  <meta property="og:image" content="https://avatars.githubusercontent.com/u/197274423?v=4">
+  
+  <link rel="icon" href="https://avatars.githubusercontent.com/u/197274423?v=4" type="image/png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    /* ════════════════════════════════   CORE DESIGN SYSTEM TOKENS ════════════════════════════════ */
+    :root {
+      --bg: #0d1117;
+      --sidebar: #161b22;
+      --panel-dark: #090d13;
+      --tab-inactive: #1f242c;
+      --border: #30363d;
+      --border-glow: #7c6aff;
+      
+      --text: #c9d1d9;
+      --text-bright: #f0f6fc;
+      --text-muted: #8b949e;
+      
+      --neon-purple: #a371f7;
+      --neon-blue: #58a6ff;
+      --neon-green: #34d399;
+      --neon-orange: #ffa657;
+      
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-theme="light"] {
+      --bg: #ffffff;
+      --sidebar: #f6f8fa;
+      --panel-dark: #f0f2f5;
+      --tab-inactive: #eaeef2;
+      --border: #d0d7de;
+      --border-glow: #0969da;
+      --text: #24292f;
+      --text-bright: #09111b;
+      --text-muted: #57606a;
+      --neon-purple: #6f42c1;
+      --neon-blue: #0969da;
+      --neon-green: #1a7f37;
+      --neon-orange: #bc4c00;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 14px; background: var(--bg); }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
+    }
+    
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+    *:focus-visible { outline: 2px solid var(--neon-purple); outline-offset: 2px; }
+
+    /* Reading Progress Bar indicator */
+    #progress-indicator-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue)); z-index: 2000; width: 0%; transition: width 0.1s linear; }
+
+    /* ════════════════════════════════   WORKSPACE SPLIT LAYOUT ════════════════════════════════ */
+    .ide-container {
+      display: flex;
+      flex: 1;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Left Sidebar Panel (25% Width Rigid Base) */
+    .ide-sidebar {
+      width: 340px;
+      min-width: 340px;
+      background-color: var(--sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow-y: auto;
+      z-index: 100;
+      transition: transform 0.4s var(--ease), background-color 0.3s;
+    }
+    .ide-sidebar::-webkit-scrollbar { width: 4px; }
+    .ide-sidebar::-webkit-scrollbar-thumb { background: var(--border); }
+
+    /* Main Right Workspace Stream (75% Width) */
+    .ide-workspace {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg);
+    }
+
+    /* ════════════════════════════════   SIDEBAR MODULES COMPONENTS ════════════════════════════════ */
+    .sidebar-block { padding: 20px; border-bottom: 1px solid var(--border); }
+    .block-heading { font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; letter-spacing: 0.05em; font-weight: 700; }
+    .block-heading i { color: var(--neon-purple); }
+
+    /* Profile Module Component */
+    .profile-node { display: flex; align-items: center; gap: 14px; position: relative; }
+    .avatar-wrapper { position: relative; width: 56px; height: 56px; flex-shrink: 0; }
+    .avatar-img { width: 100%; height: 100%; border-radius: 6px; border: 1px solid var(--border); object-fit: cover; }
+    .status-dot { position: absolute; bottom: -3px; right: -3px; width: 12px; height: 12px; background-color: var(--neon-green); border-radius: 50%; border: 2px solid var(--sidebar); box-shadow: 0 0 8px var(--neon-green); }
+    .profile-info { overflow: hidden; }
+    .profile-name { font-size: 1.15rem; font-weight: 700; color: var(--text-bright); white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+    .profile-title { font-family: var(--font-mono); font-size: 0.75rem; color: var(--neon-blue); margin-top: 2px; }
+    .profile-quote { font-size: 0.8rem; color: var(--text-muted); font-style: italic; margin-top: 8px; line-height: 1.4; }
+
+    /* Contact Details List module */
+    .contact-list { display: flex; flex-direction: column; gap: 8px; font-family: var(--font-mono); font-size: 0.8rem; }
+    .contact-item { display: flex; align-items: center; gap: 10px; color: var(--text-muted); }
+    .contact-item:hover { color: var(--text-bright); }
+    .contact-item i { color: var(--neon-blue); font-size: 0.95rem; width: 16px; }
+
+    /* Tech Stack Badge Elements Grid */
+    .badge-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+    .stack-badge { font-family: var(--font-mono); font-size: 0.72rem; padding: 4px 8px; background-color: var(--panel-dark); border: 1px solid var(--border); border-radius: 4px; color: var(--text); transition: all 0.2s; }
+    .stack-badge:hover { border-color: var(--neon-purple); color: var(--neon-purple); background: var(--bg); transform: translateY(-1px); }
+
+    /* Highlights Counter Grid Module Component */
+    .highlights-matrix { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .highlight-cell { background-color: var(--panel-dark); border: 1px solid var(--border); padding: 12px; border-radius: 4px; text-align: center; }
+    .hl-count { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700; color: var(--text-bright); line-height: 1; margin-bottom: 4px; }
+    .hl-count span { color: var(--neon-purple); }
+    .hl-label { font-size: 0.68rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.02em; }
+
+    /* Structural Actions Social Grid Panel Container */
+    .social-matrix-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+    .sidebar-soc-btn { border: 1px solid var(--border); background-color: var(--panel-dark); height: 36px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); border-radius: 4px; font-size: 1.1rem; }
+    .sidebar-soc-btn:hover { border-color: var(--neon-blue); color: var(--neon-blue); background-color: var(--bg); }
+    
+    .action-cv-btn { display: flex; width: 100%; height: 38px; align-items: center; justify-content: center; background-color: var(--neon-purple); color: #fff; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; border-radius: 4px; letter-spacing: 0.05em; transition: opacity 0.2s; }
+    .action-cv-btn:hover { opacity: 0.9; }
+
+    /* ════════════════════════════════   WORKSPACE EDITOR COMPONENT ════════════════════════════════ */
+    /* Code Editor Tab bar Navigation */
+    .ide-tab-bar { display: flex; background-color: var(--sidebar); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+    .ide-tab-bar::-webkit-scrollbar { display: none; }
+    
+    .editor-tab { display: flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--sidebar); border-right: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted); position: relative; white-space: nowrap; }
+    .editor-tab i:first-child { color: var(--neon-orange); }
+    .editor-tab.active { background-color: var(--bg); color: var(--text-bright); font-weight: 500; }
+    .editor-tab.active::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background-color: var(--neon-purple); }
+    
+    /* Code Editor File Content Viewport Canvas wrapper */
+    .editor-canvas { flex: 1; padding: 40px; overflow-y: auto; display: none; position: relative; }
+    .editor-canvas.active { display: block; animation: fadeReveal 0.3s var(--ease) forwards; }
+    @keyframes fadeReveal { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+    /* Markdown Line Structure Layout Elements */
+    .md-line { display: grid; grid-template-columns: 40px 1fr; gap: 16px; margin-bottom: 6px; font-family: var(--font-mono); font-size: 0.95rem; }
+    .ln-num { text-align: right; color: var(--text-muted); opacity: 0.4; user-select: none; padding-right: 4px; }
+    .ln-content { color: var(--text); white-space: pre-wrap; }
+    
+    /* Markdown Semantic Text Styles */
+    .ln-content h1, .ln-content h2, .ln-content h3 { font-family: var(--font-sans); color: var(--text-bright); font-weight: 700; margin-top: 10px; margin-bottom: 6px; text-transform: uppercase; }
+    .ln-content h1 { font-size: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 20px; color: var(--neon-purple); }
+    .ln-content h2 { font-size: 1.4rem; color: var(--neon-blue); margin-top: 24px; border-bottom: 1px dashed var(--border); padding-bottom: 4px; }
+    .ln-content p { font-family: var(--font-sans); color: var(--text); line-height: 1.6; margin-bottom: 10px; font-size: 1rem; }
+    .ln-content p strong { color: var(--text-bright); }
+    
+    /* Codeblock styling components */
+    .code-block-segment { background-color: var(--panel-dark); border: 1px solid var(--border); padding: 16px; border-radius: 6px; margin: 12px 0; font-family: var(--font-mono); font-size: 0.88rem; color: var(--text); overflow-x: auto; position: relative; }
+    .code-block-segment::before { content: 'BASH / OUTPUT'; position: absolute; top: 4px; right: 12px; font-size: 0.6rem; color: var(--text-muted); font-weight: 700; }
+    .code-keyword { color: var(--neon-purple); font-weight: bold; }
+    .code-string { color: var(--neon-green); }
+    .code-comment { color: var(--text-muted); font-style: italic; }
+
+    /* ════════════════════════════════   DYNAMIC MODULE CONTENT PAGES ════════════════════════════════ */
+    /* PROJECTS CORE REPOSITORY-STYLE CARDS LAYOUT MAPPING */
+    .repo-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 20px; }
+    .repo-card { background-color: var(--panel-dark); border: 1px solid var(--border); border-radius: 6px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.25s var(--ease); position: relative; }
+    .repo-card:hover { border-color: var(--neon-blue); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .repo-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .repo-title-text { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 700; color: var(--text-bright); display: flex; align-items: center; gap: 8px; }
+    .repo-title-text i { color: var(--neon-blue); }
+    .repo-desc-text { font-family: var(--font-sans); font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; }
+    .repo-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+    .repo-pills span { font-family: var(--font-mono); font-size: 0.65rem; padding: 2px 6px; background-color: var(--sidebar); border: 1px solid var(--border); border-radius: 4px; color: var(--text-muted); }
+    .repo-footer { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 12px; margin-top: auto; }
+    .repo-stats { display: flex; gap: 12px; }
+    .repo-stats span { display: flex; align-items: center; gap: 4px; }
+    .repo-stats i { color: var(--neon-orange); }
+    .repo-actions-links a { display: inline-flex; align-items: center; gap: 4px; color: var(--neon-blue); }
+    .repo-actions-links a:hover { text-decoration: underline; }
+
+    /* JOURNEY MODULE SYSTEMATIC TIMELINE CONFIGURATION MAPPING */
+    .vertical-timeline { position: relative; border-left: 2px solid var(--border); padding-left: 28px; margin: 24px 0 24px 12px; }
+    .timeline-node-item { position: relative; margin-bottom: 32px; }
+    .timeline-node-item::before { content: ''; position: absolute; left: -35px; top: 4px; width: 12px; height: 12px; background-color: var(--bg); border: 2px solid var(--neon-purple); border-radius: 50%; box-shadow: 0 0 8px var(--neon-purple); transition: background-color 0.2s; }
+    .timeline-node-item:hover::before { background-color: var(--neon-purple); }
+    .node-timestamp { font-family: var(--font-mono); font-size: 0.78rem; color: var(--neon-green); font-weight: 700; display: block; margin-bottom: 4px; }
+    .node-header-title { font-size: 1.2rem; font-weight: 700; color: var(--text-bright); text-transform: uppercase; }
+    .node-sub-org { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; display: block; }
+    .node-body-content { font-family: var(--font-sans); font-size: 0.95rem; color: var(--text); line-height: 1.5; }
+    .node-body-content ul { margin-top: 8px; padding-left: 16px; list-style-type: square; color: var(--text-muted); }
+
+    /* BLOG MODULE HIGH-DENSITY CONTENT SYSTEM */
+    .blog-controls { display: flex; gap: 16px; margin-bottom: 24px; align-items: center; flex-wrap: wrap; }
+    .search-input-wrapper { flex: 1; min-width: 240px; position: relative; }
+    .search-input-field { width: 100%; background-color: var(--panel-dark); border: 1px solid var(--border); padding: 10px 16px 10px 38px; border-radius: 6px; color: #fff; font-size: 0.9rem; outline: none; }
+    .search-input-field:focus { border-color: var(--neon-purple); }
+    .search-input-wrapper i { position: absolute; left: 14px; top: 12px; color: var(--text-muted); font-size: 1rem; }
+    
+    .blog-cards-grid { display: flex; flex-direction: column; gap: 20px; }
+    .blog-card { display: grid; grid-template-columns: 240px 1fr; border: 1px solid var(--border); background-color: var(--panel-dark); border-radius: 8px; overflow: hidden; transition: all 0.25s var(--ease); cursor: pointer; }
+    .blog-card:hover { border-color: var(--neon-purple); transform: translateX(4px); box-shadow: 0 4px 20px rgba(124,106,255,0.1); }
+    .blog-thumb-frame { width: 100%; height: 100%; background-color: var(--sidebar); border-right: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--text-muted); opacity: 0.7; }
+    .blog-content-block { padding: 24px; display: flex; flex-direction: column; justify-content: space-between; }
+    .blog-meta-data { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 6px; display: flex; gap: 16px; }
+    .blog-card-title { font-family: var(--font-sans); font-size: 1.3rem; font-weight: 700; color: var(--text-bright); margin-bottom: 8px; line-height: 1.3; }
+    .blog-card-summary { font-family: var(--font-sans); font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; }
+    .blog-tags-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .blog-tag-badge { font-family: var(--font-mono); font-size: 0.65rem; padding: 2px 8px; background-color: var(--bg); border: 1px solid var(--border); border-radius: 4px; color: var(--neon-blue); }
+
+    /* ════════════════════════════════   BOTTOM STATUS BAR & TERMINAL WIDGET ════════════════════════════════ */
+    /* Interactive Terminal System Viewport Widget */
+    .terminal-drawer-widget { background-color: var(--panel-dark); border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.85rem; height: 220px; display: flex; flex-direction: column; }
+    .term-tabs-row { display: flex; background-color: var(--sidebar); border-bottom: 1px solid var(--border); padding-left: 20px; gap: 16px; }
+    .term-tab-btn { font-size: 0.72rem; text-transform: uppercase; padding: 8px 0; color: var(--text-muted); font-weight: 700; letter-spacing: 0.05em; position: relative; }
+    .term-tab-btn.active { color: var(--neon-green); }
+    .term-tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background-color: var(--neon-green); }
+    
+    .term-buffer-stream { flex: 1; padding: 16px 24px; overflow-y: auto; line-height: 1.6; color: #e1e1e3; }
+    .term-row { margin-bottom: 4px; white-space: pre-wrap; word-break: break-all; }
+    .term-prompt-marker { color: var(--neon-green); font-weight: 700; }
+    
+    /* VS Code Footer Bar Alignment */
+    .ide-footer-status-bar { height: 24px; background-color: var(--neon-purple); color: #fff; font-family: var(--font-mono); font-size: 0.72rem; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; position: relative; z-index: 150; font-weight: 500; }
+    .footer-left-node, .footer-right-node { display: flex; align-items: center; gap: 14px; }
+    .footer-clickable-item:hover { background-color: rgba(255,255,255,0.15); cursor: pointer; padding: 0 4px; margin: 0 -4px; }
+
+    /* ════════════════════════════════   COMMAND PALETTE SYSTEM OVERLAY (CTRL+K) ════════════════════════════════ */
+    .palette-modal-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.75); backdrop-filter: blur(4px); z-index: 5000; display: none; align-items: flex-start; justify-content: center; padding-top: 10vh; }
+    .palette-modal-overlay.active { display: flex; }
+    .palette-box-frame { background-color: var(--sidebar); border: 1px solid var(--border-glow); border-radius: 8px; width: 100%; max-width: 540px; box-shadow: 0 16px 48px rgba(0,0,0,0.6); overflow: hidden; animation: paletteScaleIn 0.2s var(--ease) forwards; }
+    @keyframes paletteScaleIn { from { transform: scale(0.97) translateY(-8px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+    .palette-input-row { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--border); background-color: var(--bg); }
+    .palette-input-row i { color: var(--neon-purple); font-size: 1.1rem; }
+    .palette-search-field { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-family: var(--font-mono); font-size: 0.9rem; }
+    .palette-results-list { max-height: 280px; overflow-y: auto; padding: 6px 0; }
+    .palette-option-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted); cursor: pointer; }
+    .palette-option-item.selected, .palette-option-item:hover { background-color: var(--panel-dark); color: var(--text-bright); }
+    .palette-shortcut-hint { font-size: 0.68rem; padding: 2px 6px; background-color: var(--border); border-radius: 4px; color: var(--text-muted); }
+
+    /* Floating Navigation Controls row for compressed viewports */
+    .mobile-nav-scroll-wrapper { display: none; background-color: var(--sidebar); border-bottom: 1px solid var(--border); padding: 4px; overflow-x: auto; scrollbar-width: none; }
+    .mobile-menu-toggle-trigger { display: none; width: 40px; height: 40px; border-radius: 50%; background-color: var(--neon-purple); color: #fff; position: fixed; bottom: 44px; right: 20px; z-index: 1000; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 4px 16px rgba(124,106,255,0.4); }
+
+    /* ════════════════════════════════   RESPONSIVE COMPRESSION QUERY RULES ════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .ide-container { grid-template-columns: 1fr; }
+      .ide-sidebar { position: fixed; top: 0; left: 0; bottom: 24px; transform: translateX(-100%); width: 300px; min-width: 300px; box-shadow: 12px 0 32px rgba(0,0,0,0.5); }
+      .ide-sidebar.open { transform: translateX(0); }
+      .mobile-nav-scroll-wrapper { display: flex; }
+      .mobile-menu-toggle-trigger { display: flex; }
+      .editor-canvas { padding: 24px; }
+      .blog-card { grid-template-columns: 1fr; }
+      .blog-thumb-frame { height: 120px; border-right: none; border-bottom: 1px solid var(--border); }
+    }
+    
+    @media (max-width: 480px) {
+      .editor-canvas { padding: 16px; }
+      .timeline-card { grid-template-columns: 1fr; gap: 6px; }
+      .vertical-timeline { padding-left: 20px; }
+      .timeline-node-item::before { left: -27px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress-indicator-bar" aria-hidden="true"></div>
+
+  <div class="ide-container">
+    
+    <aside class="ide-sidebar" id="ide-sidebar-node" role="complementary" aria-label="Developer System Metrics Node">
+      
+      <div class="sidebar-block profile-node">
+        <div class="avatar-wrapper">
+          <img class="avatar-img" src="https://avatars.githubusercontent.com/u/197274423?v=4" alt="Sakshith C Shetty Network Profile Avatar">
+          <div class="status-dot" id="status-dot-indicator" title="System Matrix: Active Parsing Mode"></div>
+        </div>
+        <div class="profile-info">
+          <h1 class="profile-name">Sakshith C Shetty</h1>
+          <div class="profile-title">Offensive Security Operator</div>
+        </div>
+      </div>
+      <div class="sidebar-block" style="padding: 10px 20px;">
+        <p class="profile-quote">"Hunting multi-tenant authorization bypass logic parameters anomalies at scale across production networks."</p>
+      </div>
+
+      <div class="sidebar-block">
+        <div class="block-heading"><i class="ri-git-repository-private-line"></i> Ingress_Channels</div>
+        <div class="contact-list" role="list">
+          <div class="contact-item" role="listitem"><i class="ri-mail-send-line"></i> contact@shadow269.in</div>
+          <div class="contact-item" role="listitem"><i class="ri-map-pin-user-line"></i> Mangaluru, Karnataka, IN</div>
+          <div class="contact-item" role="listitem"><i class="ri-shield-user-line"></i> Handle: SHADOW-269</div>
+        </div>
+      </div>
+
+      <div class="sidebar-block">
+        <div class="block-heading"><i class="ri-cpu-line"></i> Ingested_Modules</div>
+        <div class="badge-cloud">
+          <span class="stack-badge">JavaScript</span><span class="stack-badge">TypeScript</span>
+          <span class="stack-badge">Go Lang</span><span class="stack-badge">Python Core</span>
+          <span class="stack-badge">Docker API</span><span class="stack-badge">PostgreSQL</span>
+          <span class="stack-badge">Frida Engine</span><span class="stack-badge">Burp Suite Pro</span>
+          <span class="stack-badge">OWASP Matrix</span><span class="stack-badge">Linux Kernel</span>
+        </div>
+      </div>
+
+      <div class="sidebar-block">
+        <div class="block-heading"><i class="ri-pulse-line"></i> Operational_Telemetry</div>
+        <div class="highlights-matrix">
+          <div class="highlight-cell"><div class="hl-count">2+</div><div class="hl-label">Years Active</div></div>
+          <div class="highlight-cell"><div class="hl-count">8+</div><div class="hl-label">Certificates</div></div>
+          <div class="highlight-cell"><div class="hl-count">50+</div><div class="hl-label">Bugs Found</div></div>
+          <div class="highlight-cell"><div class="hl-count" id="live-git-stars-counter">14<span>★</span></div><div class="hl-label">Repo Stars</div></div>
+        </div>
+      </div>
+
+      <div class="sidebar-block">
+        <div class="block-heading"><i class="ri-focus-3-line"></i> Active_Threads</div>
+        <div class="badge-cloud">
+          <span class="stack-badge" style="border-style:dashed;">Security Research</span>
+          <span class="stack-badge" style="border-style:dashed;">System Architecture</span>
+          <span class="stack-badge" style="border-style:dashed;">Automated Fuzzing Logic</span>
+        </div>
+      </div>
+
+      <div class="sidebar-block" style="margin-top: auto; border-bottom: none;">
+        <div class="social-matrix-grid" role="list" aria-label="Social Link Matrices Channels">
+          <a href="https://github.com/shadow269" target="_blank" rel="noopener noreferrer" class="sidebar-soc-btn" aria-label="GitHub System Endpoint" role="listitem"><i class="ri-github-fill"></i></a>
+          <a href="https://linkedin.com/in/shadow269" target="_blank" rel="noopener noreferrer" class="sidebar-soc-btn" aria-label="LinkedIn System Endpoint" role="listitem"><i class="ri-linkedin-box-fill"></i></a>
+          <a href="#" class="sidebar-soc-btn" aria-label="Twitter X Ingestion Endpoint" role="listitem"><i class="ri-twitter-x-fill"></i></a>
+          <button onclick="toggleCommandPaletteModalWindow()" class="sidebar-soc-btn" aria-label="Open Command Palette Engine Controller Node"><i class="ri-terminal-box-line"></i></button>
+        </div>
+        <button onclick="executeTerminalCommandSimulation('cat README.md')" class="action-cv-btn"><i class="ri-file-code-line"></i> cat README.md</button>
+      </div>
+
+    </aside>
+
+    <main class="ide-workspace" role="main">
+      
+      <div class="mobile-nav-scroll-wrapper" id="mobile-tabs-row" aria-label="Mobile View Tab Shortcuts System"></div>
+
+      <div class="ide-tab-bar" id="editor-tabs-header-container" role="tablist" aria-label="Workspace Code Buffer Ingestion Sheets Open">
+        </div>
+
+      <section class="editor-canvas" id="canvas-about_md" role="tabpanel" aria-label="Workspace Context Source view file: about.md">
+        <div class="md-line"><div class="ln-num">1</div><div class="ln-content"><h1># Operational Registry Profile</h1></div></div>
+        <div class="md-line"><div class="ln-num">2</div><div class="ln-content"><p>I am Sakshith C Shetty — a specialized computer applications background graduate who turned core software construction understanding into an adversarial logic breakdown model. Operating inside wild cloud configurations landscapes under user tag registration handle <strong>SHADOW-269</strong> on bug bounty ecosystems.</p></div></div>
+        <div class="md-line"><div class="ln-num">3</div><div class="ln-content"><h2>## Architectural Assessment Methodology</h2></div></div>
+        <div class="md-line"><div class="ln-num">4</div><div class="ln-content"><p>Traditional vulnerability scanning systems map superficial parameter patterns. My strategy centers completely around breaking underlying business rules. By intercepting nested API microservice call routes, manipulating structure serialization states, and isolating broken tenant isolation profiles, I surface serious logical security gaps before malicious threat entities capitalize on them.</p></div></div>
+        <div class="md-line"><div class="ln-num">5</div><div class="ln-content">
+          <div class="code-block-segment">
+<span class="code-keyword">import</span> security_ops
+<span class="code-comment"># Active Environment Target Handshake Initialization parameters mapping loop trace</span>
+target_node = security_ops.IngestTarget(<span class="code-string">"production.infrastructure.map"</span>)
+target_node.execute_logic_fuzzing_pipeline(depth=<span class="code-keyword">True</span>)
+          </div>
+        </div>
+      </section>
+
+      <section class="editor-canvas" id="canvas-projects_md" role="tabpanel" aria-label="Workspace Context Source view file: projects.md">
+        <div class="md-line"><div class="ln-num">1</div><div class="ln-content"><h1># Compiled Repositories Artifacts Log</h1></div></div>
+        <div class="md-line"><div class="ln-num">2</div><div class="ln-content"><p>A directory tracking software libraries, secure backend development modules, and custom automation validation pipelines structured over assessment intervals.</p></div></div>
+        
+        <div class="repo-cards-grid" id="projects-target-injection-viewport-grid">
+          </div>
+      </section>
+
+      <section class="editor-canvas" id="canvas-journey_md" role="tabpanel" aria-label="Workspace Context Source view file: journey.md">
+        <div class="md-line"><div class="ln-num">1</div><div class="ln-content"><h1># Structural Chronology History Track</h1></div></div>
+        <div class="md-line"><div class="ln-num">2</div><div class="ln-content"><p>A documented history path log mapping the path from systems design theories study layers to live adversarial operations execution.</p></div></div>
+        
+        <div class="vertical-timeline" id="journey-timeline-target-injection-viewport">
+          </div>
+      </section>
+
+      <section class="editor-canvas" id="canvas-blog_md" role="tabpanel" aria-label="Workspace Context Source view file: blog.md">
+        <div class="md-line"><div class="ln-num">1</div><div class="ln-content"><h1># Adversarial Threat Technical Writeups</h1></div></div>
+        
+        <div class="blog-controls">
+          <div class="search-input-wrapper">
+            <i class="ri-search-eye-line" aria-hidden="true"></i>
+            <input type="text" class="search-input-field" id="blog-search-field-input" placeholder="Search writeups database parameters index..." aria-label="Query content mapping engine filtering parameter input field">
+          </div>
+        </div>
+
+        <div class="blog-cards-grid" id="blog-posts-target-injection-viewport-grid">
+          </div>
+      </section>
+
+      <section class="editor-canvas" id="canvas-contact_md" role="tabpanel" aria-label="Workspace Context Source view file: contact.md">
+        <div class="md-line"><div class="ln-num">1</div><div class="ln-content"><h1># Connect Secure Communication Parameters</h1></div></div>
+        <div class="md-line"><div class="ln-num">2</div><div class="ln-content"><p>Submit scope coordinates, private bug bounty program invites, or custom contract consulting requests directly to the operational ingestion routing center queue.</p></div></div>
+        
+        <div class="md-line"><div class="ln-num">3</div><div class="ln-content" style="margin-top: 20px;">
+          <form class="form-blueprint" id="secure-outbound-form-blueprint" novalidate>
+            <div class="form-row-split">
+              <div class="control-group">
+                <label class="field-tag-label" for="f-name">Origin Identity Tag</label>
+                <input type="text" id="f-name" class="brutal-input-field" placeholder="Identification Tag Signature" required>
+              </div>
+              <div class="control-group">
+                <label class="field-tag-label" for="f-email">Return Routing Vector</label>
+                <input type="email" id="f-email" class="brutal-input-field" placeholder="identity@domain.local" required autocomplete="email">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="field-tag-label" for="f-msg">Context Parameter Payload Log Details</label>
+              <textarea id="f-msg" class="brutal-input-field" rows="6" style="resize:vertical;" placeholder="Detail verification boundaries definitions, target environment sizes metrics, timing boundaries constraints, or target access rules parameter specifications..." required></textarea>
+            </div>
+            <button type="submit" class="action-cv-btn" style="width: max-content; padding: 0 32px;"><i class="ri-send-plane-fill"></i> Dispatch Handshake Packet</button>
+            <div id="form-execution-feedback-log-node" style="font-family:var(--font-mono); font-size:0.82rem; color:var(--neon-green); display:none; margin-top:10px;" role="status"></div>
+          </form>
+        </div>
+      </section>
+
+      <div class="terminal-drawer-widget" role="region" aria-label="Interactive Log Monitoring Processing Shell Console">
+        <div class="term-tabs-row" role="tablist">
+          <button class="term-tab-btn active" role="tab" id="t-tab-log" aria-selected="true">Operational_Terminal_Buffer.sh</button>
+          <button class="term-tab-btn" role="tab" id="t-tab-commits" aria-selected="false">Recent_Git_Commits.log</button>
+        </div>
+        <div class="term-buffer-stream" id="terminal-screen-buffer-stream" aria-live="polite">
+          </div>
+        <div class="term-interactive-row">
+          <span class="term-prompt-marker" aria-hidden="true">guest@shadow269_ops:~$</span>
+          <input type="text" class="term-input-field-entry" id="terminal-keyboard-input-element" placeholder="Input analytical directive command flag parameter..." autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Console Direct Input Ingestion Row Pointer">
+        </div>
+      </div>
+
+      <footer class="ide-footer-status-bar" role="contentinfo">
+        <div class="footer-left-node">
+          <span class="footer-clickable-item" onclick="toggleThemeSwitcherPattern()"><i class="ri-contrast-line"></i> Style_Theme: Cyber_Dark</span>
+          <span class="footer-clickable-item" onclick="toggleCommandPaletteModalWindow()"><i class="ri-command-line"></i> Ctrl+K Palette</span>
+        </div>
+        <div class="footer-right-node">
+          <span>Encoding: UTF-8</span>
+          <span>Spaces: 2</span>
+          <span>Log State: Active_Sync ✓</span>
+        </div>
+      </footer>
+
+    </main>
+  </div>
+
+  <div class="palette-modal-overlay" id="palette-modal-overlay-viewport" role="dialog" aria-modal="true" aria-labelledby="palette-search-field">
+    <div class="palette-box-frame">
+      <div class="palette-input-row">
+        <i class="ri-terminal-box-line" aria-hidden="true"></i>
+        <input type="text" class="palette-search-field" id="palette-search-field-input" placeholder="Type a control navigation target parameter string..." autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
+      <div class="palette-results-list" id="palette-results-target-injection-viewport-list" role="listbox">
+        </div>
+    </div>
+  </div>
+
+  <button class="mobile-menu-toggle-trigger" id="mobile-drawer-toggle-btn" aria-label="Toggle structural metadata sidebar configuration drawer instance view"><i class="ri-menu-unfold-line"></i></button>
+
+  <script>
+    // ════════════════════════════════  WORKSPACE DATA OBJECT REGISTRY MAPS ════════════════════════════════
+    const WORKSPACE_SHEETS_CONFIG = [
+      { key: 'about_md', label: 'about.md', icon: 'ri-markdown-line' },
+      { key: 'projects_md', label: 'projects.md', icon: 'ri-file-code-line' },
+      { key: 'journey_md', label: 'journey.md', icon: 'ri-history-line' },
+      { key: 'blog_md', label: 'blog.md', icon: 'ri-git-merge-line' },
+      { key: 'contact_md', label: 'contact.md', icon: 'ri-mail-open-line' }
+    ];
+
+    const REPOSITORIES_PROJECTS_METADATA = [
+      { name: 'CivicEye-Platform-Core', desc: 'Real-time video edge parsing classification pipeline using YOLOv8 frameworks linked into explicitly validation-hardened multi-role relational PHP datastore nodes.', tech: ['YOLOv8 Core', 'PHP', 'MySQL', 'Python Processors'], stars: 8, forks: 2, updated: 'May 2025' },
+      { name: 'CyberSapiens-Audit-Toolkit', desc: 'Centralized production code repositories tracking custom parsing engine filters scripts, regex sanitization bypass models, and target bound automation templates used during enterprise infrastructure VAPT tasks.', tech: ['Python', 'Bash Scripts', 'Burp Extensions Engine'], stars: 6, forks: 1, updated: 'March 2026' },
+      { name: 'RigMaster-Configurator-UX', desc: 'High-density computational hardware configuration selector prototype designed inside Framer utilizing optimized schema models hooks to provide sub-140ms asset redrawing metrics.', tech: ['Framer UI', 'JavaScript Logic', 'Data Schema Models'], stars: 3, forks: 0, updated: 'April 2025' }
+    ];
+
+    const CHRONOLOGY_TIMELINE_METADATA = [
+      { time: 'MARCH 2026 — PRESENT', role: 'Penetration Tester Operator', org: 'Bugcrowd Security Evaluation Networks', body: 'Isolating logical token vulnerabilities, broken state tracking conditions, and multi-tenant information exposure boundaries in wild production deployment platforms.' },
+      { time: 'JULY 2025 — MARCH 2026', role: 'Cybersecurity VAPT Specialist Intern', org: 'CyberSapiens Enterprise Risk Advisory Labs', body: 'Conducted architecture security audits testing distributed web APIs layers and target mobile platform installations archives package reversing tasks.', points: ['Automated validation routines tracking JWT verification bypass sequences.', 'Bpassed perimeter transport controls by injecting localized Frida orchestration scripts wrappers.'] },
+      { time: '2022 — 2025', role: 'Bachelor of Computer Applications Graduate', org: 'Mangalore University Computer Studies Faculty', body: 'Acquired absolute baseline theoretical tracking parameters modeling algorithmic systems execution steps, structured network patterns design, and microservice query data optimization configurations.' }
+    ];
+
+    const BLOG_POSTS_METADATA = [
+      { id: 'bp-01', title: 'Chaining Authorization Errors to Evade Multi-Tenant Data Boundaries', date: 'May 27, 2026', time: '12 min read', excerpt: 'Deep-dive analytical review tracking how flawed claims mapping validations inside structural authentication workflows permit adjacent resource extraction maps compilation.', tags: ['security', 'cloud', 'system-design'] },
+      { id: 'bp-02', title: 'Dynamic Frida Hooks Ingestion: Overriding Transport Layer Security Controls', date: 'January 14, 2026', time: '9 min read', excerpt: 'A clear guide explaining how to hook, instrument, and intercept runtime execution tracking arrays inside native Android components to trace encryption keys generation cycles.', tags: ['android', 'reverse-engineering', 'security'] }
+    ];
+
+    const PALETTE_NAVIGATION_COMMANDS_MATRIX = [
+      { label: 'Navigate: Go to about.md file layer view', target: 'about_md', type: 'nav' },
+      { label: 'Navigate: Go to projects.md repositories inventory code', target: 'projects_md', type: 'nav' },
+      { label: 'Navigate: Go to journey.md timeline log records', target: 'journey_md', type: 'nav' },
+      { label: 'Navigate: Go to blog.md research writeups metrics', target: 'blog_md', type: 'nav' },
+      { label: 'Navigate: Go to contact.md secure communication pipeline', target: 'contact_md', type: 'nav' },
+      { label: 'Action: Clear active execution terminal shell screen memory', action: 'clear_terminal', type: 'cmd' },
+      { label: 'Action: Run default profile cat README.md tracking script', action: 'readme_simulation', type: 'cmd' }
+    ];
+
+    // ════════════════════════════════  WORKSPACE STRUCTURAL LAYOUT COMPILERS ════════════════════════════════
+    function escapeDOMInjectionStringText(stringInputSource) {
+      return String(stringInputSource).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function executeWorkspaceCoreArchitectureCompilation() {
+      // VS Code Editor Active Open Tabs Structure Injection
+      const desktopHeaderTabsRowContainerElement = document.getElementById('editor-tabs-header-container');
+      const mobileTabsScrollRowContainerElement = document.getElementById('mobile-tabs-row');
+
+      const tabsHtmlStringBlock = WORKSPACE_SHEETS_CONFIG.map(sheet => `
+        <button class="editor-tab" role="tab" id="tab-selector_target-${sheet.key}" aria-selected="false" aria-controls="canvas-${sheet.key}" onclick="activateWorkspaceSheetTabContainerInstance('${sheet.key}')">
+          <i class="${escapeDOMInjectionStringText(sheet.icon)}" aria-hidden="true"></i> ${escapeDOMInjectionStringText(sheet.label)}
+        </button>
+      `).join('');
+
+      desktopHeaderTabsRowContainerElement.innerHTML = tabsHtmlStringBlock;
+      mobileTabsScrollRowContainerElement.innerHTML = tabsHtmlStringBlock;
+
+      // Project Repositories Structural Layout Compilation Map
+      document.getElementById('projects-target-injection-viewport-grid').innerHTML = REPOSITORIES_PROJECTS_METADATA.map(repo => `
+        <div class="repo-card" role="listitem">
+          <div>
+            <div class="repo-head">
+              <div class="repo-title-text"><i class="ri-git-repository-line" aria-hidden="true"></i> ${escapeDOMInjectionStringText(repo.name)}</div>
+              <i class="ri-git-branch-line" style="color:var(--text-muted); font-size:0.9rem;" aria-hidden="true"></i>
+            </div>
+            <p class="repo-desc-text">${escapeDOMInjectionStringText(repo.desc)}</p>
+            <div class="repo-pills">
+              ${repo.tech.map(t => `<span>${escapeDOMInjectionStringText(t)}</span>`).join('')}
+            </div>
+          </div>
+          <div class="repo-footer">
+            <div class="repo-stats">
+              <span><i class="ri-star-line"></i> ${repo.stars}</span>
+              <span><i class="ri-git-fork-line" style="color:var(--neon-blue);"></i> ${repo.forks}</span>
+            </div>
+            <div class="repo-actions-links">
+              <a href="https://github.com/shadow269" target="_blank" rel="noopener noreferrer">Inspect_Node Key →</a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // Chronological History Timeline Sheet Ingestion Parser
+      document.getElementById('journey-timeline-target-injection-viewport').innerHTML = CHRONOLOGY_TIMELINE_METADATA.map(node => `
+        <div class="timeline-node-item" role="listitem">
+          <span class="node-timestamp">${escapeDOMInjectionStringText(node.time)}</span>
+          <h3 class="node-header-title">${escapeDOMInjectionStringText(node.role)}</h3>
+          <span class="node-sub-org">${escapeDOMInjectionStringText(node.org)}</span>
+          <p class="node-body-content">${escapeDOMInjectionStringText(node.body)}</p>
+          ${node.points ? `
+            <div class="node-body-content">
+              <ul>${node.points.map(pt => `<li>${escapeDOMInjectionStringText(pt)}</li>`).join('')}</ul>
+            </div>
+          ` : ''}
+        </div>
+      `).join('');
+
+      // Render Threat Blog Posts Block Layout Mapping System
+      compileThreatBlogPostsViewportCanvas();
+
+      // Compile and Bind Command Palette Options Checklist array items context 
+      document.getElementById('palette-results-target-injection-viewport-list').innerHTML = PALETTE_NAVIGATION_COMMANDS_MATRIX.map((cmd, idx) => `
+        <div class="palette-option-item ${idx === 0 ? 'selected' : ''}" role="option" id="palette-option-idx-${idx}" onclick="executePaletteOptionCommandCallbackIndexReference(${idx})">
+          <span>${escapeDOMInjectionStringText(cmd.label)}</span>
+          <span class="palette-shortcut-hint">${cmd.type === 'nav' ? 'Navigation' : 'Shell Routine'}</span>
+        </div>
+      `).join('');
+    }
+
+    function compileThreatBlogPostsViewportCanvas(filterQueryTextKeywordString = '') {
+      const filteredPostsDatasetArray = filterQueryTextKeywordString === '' 
+        ? BLOG_POSTS_METADATA 
+        : BLOG_POSTS_METADATA.filter(p => p.title.toLowerCase().includes(filterQueryTextKeywordString.toLowerCase()) || p.excerpt.toLowerCase().includes(filterQueryTextKeywordString.toLowerCase()));
+
+      const postsRenderContainerDOMElementPointer = document.getElementById('blog-posts-target-injection-viewport-grid');
+      
+      if (filteredPostsDatasetArray.length) {
+        postsRenderContainerDOMElementPointer.innerHTML = filteredPostsDatasetArray.map(post => `
+          <div class="blog-card" role="listitem" onclick="executeTerminalCommandSimulation('cat blog/posts/${post.id}.md')">
+            <div class="blog-thumb-frame" aria-hidden="true">
+              <i class="ri-article-line"></i>
+            </div>
+            <div class="blog-content-block">
+              <div>
+                <div class="blog-meta-data">
+                  <span><i class="ri-calendar-todo-line"></i> ${escapeDOMInjectionStringText(post.date)}</span>
+                  <span><i class="ri-time-line"></i> ${escapeDOMInjectionStringText(post.time)}</span>
+                </div>
+                <h3 class="blog-card-title">${escapeDOMInjectionStringText(post.title)}</h3>
+                <p class="blog-card-summary">${escapeDOMInjectionStringText(post.excerpt)}</p>
+              </div>
+              <div class="blog-tags-row">
+                ${post.tags.map(t => `<span class="blog-tag-badge">#${escapeDOMInjectionStringText(t)}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        postsRenderContainerDOMElementPointer.innerHTML = '<div style="padding:40px; text-align:center; font-family:var(--font-mono); color:var(--text-muted);">No logs writeups match criteria query bounds.</div>';
+      }
+    }
+
+    // ════════════════════════════════  WORKSPACE NAVIGATION AND SHEET SELECTION ROUTINES ════════════════════════════════
+    function activateWorkspaceSheetTabContainerInstance(targetSheetUniqueTokenKeyString) {
+      // Disengage all structural indicators maps layers links triggers locations 
+      document.querySelectorAll('.editor-tab').forEach(tabElement => {
+        tabElement.classList.remove('active');
+        tabElement.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.editor-canvas').forEach(canvasElement => canvasElement.classList.remove('active'));
+
+      // Isolate and target contextual elements to switch states mapping parameter 
+      const selectedDesktopTabNodeReference = document.getElementById(`tab-selector_target-${targetSheetUniqueTokenKeyString}`);
+      const selectedMobileTabNodeReference = document.getElementById(`mobile-tabs-row`).querySelector(`#tab-selector_target-${targetSheetUniqueTokenKeyString}`);
+      const targetCanvasViewportElementNode = document.getElementById(`canvas-${targetSheetUniqueTokenKeyString}`);
+
+      if (selectedDesktopTabNodeReference) {
+        selectedDesktopTabNodeReference.classList.add('active');
+        selectedDesktopTabNodeReference.setAttribute('aria-selected', 'true');
+      }
+      if (selectedMobileTabNodeReference) selectedMobileTabNodeReference.classList.add('active');
+      if (targetCanvasViewportElementNode) targetCanvasViewportElementNode.classList.add('active');
+
+      // Sync local display layout reading indicators parameters 
+      recalculateReadingScrollProgressTrackingMetrics();
+    }
+
+    // ════════════════════════════════  VIRTUAL INTERACTIVE TERMINAL WIDGET SHELL ════════════════════════════════
+    const SHELL_MOCK_DIRECTIVES_REGISTRY_CONTROLLERS = {
+      help() {
+        return [
+          "Operational Framework Virtual Shell Registry - Executable Routines:",
+          "  help               — Output system core operational directives indexes maps.",
+          "  cat README.md      — Execute local data ingestion and initialization parsing run.",
+          "  ls projects/       — Display active blueprint configuration schemas values list.",
+          "  clear              — Purge current visual interface console terminal buffer tracker lines."
+        ];
+      },
+      ['cat readme.md']() {
+        return [
+          "Ingesting Sakshith C Shetty Network Node variable context maps parameters...",
+          "  -> Handle Identifier String Verified: SHADOW-269 (Bugcrowd Live Matrix Audit Active Target Group)",
+          "  -> Ingest Pipeline Target Vectors  : Web Application Bounds Bypassing // RESTful Serialization Intercepts",
+          "  -> Inception Status Code Tracker  : Reception arrays open for target assessments allocations loops."
+        ];
+      },
+      ['ls projects/']() {
+        return [
+          "Directory: contents/blueprints/exploits/ (3 objects array items context trace located):",
+          "  [Obj Ref 0] -> CivicEye-Platform-Core (YOLOv8 Relational Backend Security Context Map)",
+          "  [Obj Ref 1] -> CyberSapiens-Audit-Toolkit (Automation payload checking processing modules code)",
+          "  [Obj Ref 2] -> RigMaster-Configurator-UX (Latency redrawing layout model engine components configuration)"
+        ];
+      }
+    };
+
+    const terminalScreenBufferContainerStreamElement = document.getElementById('terminal-screen-buffer-stream');
+    const terminalKeyboardInputFieldElementNode = document.getElementById('terminal-keyboard-input-element');
+
+    function executeTerminalCommandSimulation(rawTextStringInputParameterCommandString) {
+      const sanitizedCommandStringTextToken = rawTextStringInputParameterCommandString.trim();
+      if (!sanitizedCommandStringTextToken) return;
+
+      // Echo command input row token string
+      const promptEchoElementNodeBlock = document.createElement('div');
+      promptEchoElementNodeBlock.className = 'term-row';
+      promptEchoElementNodeBlock.innerHTML = `<span class="term-prompt-marker">guest@shadow269_ops:~$</span> <span style="color:#fff;"></span>`;
+      promptEchoElementNodeBlock.querySelector('span:last-child').textContent = sanitizedCommandStringTextToken;
+      terminalScreenBufferContainerStreamElement.appendChild(promptEchoElementNodeBlock);
+
+      const normalizedLookupKeyTokenString = sanitizedCommandStringTextToken.toLowerCase().replace(/\s+/g, ' ');
+      
+      if (normalizedLookupKeyTokenString === 'clear') {
+        terminalScreenBufferContainerStreamElement.innerHTML = '';
+        return;
+      }
+
+      const responseLineRowElementNode = document.createElement('div');
+      responseLineRowElementNode.className = 'term-row';
+
+      if (SHELL_MOCK_DIRECTIVES_REGISTRY_CONTROLLERS[normalizedLookupKeyTokenString]) {
+        const compiledStringLinesOutputArrayDataStructureValue = SHELL_MOCK_DIRECTIVES_REGISTRY_CONTROLLERS[normalizedLookupKeyTokenString]();
+        responseLineRowElementNode.innerHTML = compiledStringLinesOutputArrayDataStructureValue.map(line => escapeDOMInjectionStringText(line)).join('\n');
+        terminalScreenBufferContainerStreamElement.appendChild(responseLineRowElementNode);
+      } else if (normalizedLookupKeyTokenString.startsWith('cat blog/posts/')) {
+        responseLineRowElementNode.innerHTML = `[INGEST SYSTEM] Opening structural writeup content path... Complete. Fetching context stream markers lines parameters checks loop completed. Target writeup signature parameters trace read pass successfully established.`;
+        terminalScreenBufferContainerStreamElement.appendChild(responseLineRowElementNode);
+      } else {
+        responseLineRowElementNode.innerHTML = `<span class="term-row"><span class="term-row err">Shell Exception Code 404 Status: Inbound parsing engine mapping validation has failed for query [${escapeDOMInjectionStringText(sanitizedCommandStringTextToken)}]. Input flag matches no known executive routing pointer. Execute 'help'.</span></span>`;
+        terminalScreenBufferContainerStreamElement.appendChild(responseLineRowElementNode);
+      }
+
+      terminalScreenBufferContainerStreamElement.scrollTop = terminalScreenBufferContainerStreamElement.scrollHeight;
+    }
+
+    terminalKeyboardInputFieldElementNode.addEventListener('keydown', (keyboardTriggerEventContextDataPayload) => {
+      if (keyboardTriggerEventContextDataPayload.key === 'Enter') {
+        const rawInputTextStringSourceValue = terminalKeyboardInputFieldElementNode.value;
+        if (!rawInputTextStringSourceValue.trim()) return;
+
+        executeTerminalCommandSimulation(rawInputTextStringSourceValue);
+        terminalKeyboardInputFieldElementNode.value = '';
+      }
+    });
+
+    // ════════════════════════════════  COMMAND PALETTE MODAL ENGINE CONTROLLER CODES (CTRL+K) ════════════════════════════════
+    const paletteOverlayWindowViewportContainerNode = document.getElementById('palette-modal-overlay-viewport');
+    const paletteSearchInputFieldTextElementNode = document.getElementById('palette-search-field-input');
+    let currentSelectedPaletteOptionIndexReferencePointer = 0;
+
+    function toggleCommandPaletteModalWindow() {
+      const verificationActiveVisibilityFlagValueState = paletteOverlayWindowViewportContainerNode.classList.toggle('active');
+      if (verificationActiveVisibilityFlagValueState) {
+        paletteSearchInputFieldTextElementNode.value = '';
+        currentSelectedPaletteOptionIndexReferencePointer = 0;
+        recalculateAndSynchronizePaletteSelectionVisualStatusIndicators();
+        setTimeout(() => paletteSearchInputFieldTextElementNode.focus(), 50);
+      }
+    }
+
+    function recalculateAndSynchronizePaletteSelectionVisualStatusIndicators() {
+      const resultsCollectionElementsNodeList = document.querySelectorAll('#palette-results-target-injection-viewport-list .palette-option-item');
+      resultsCollectionElementsNodeList.forEach((el, idx) => {
+        if (idx === currentSelectedPaletteOptionIndexReferencePointer) {
+          el.classList.add('selected');
+          el.scrollIntoView({ block: 'nearest' });
+        } else {
+          el.classList.remove('selected');
+        }
+      });
+    }
+
+    function executePaletteOptionCommandCallbackIndexReference(targetIndexReferencePointerIndexNumber) {
+      const targetInstructionObjectReferenceDataBlockValue = PALETTE_NAVIGATION_COMMANDS_MATRIX[targetIndexReferencePointerIndexNumber];
+      if (!targetInstructionObjectReferenceDataBlockValue) return;
+
+      toggleCommandPaletteModalWindow(); // Terminate instance interface view immediately
+
+      if (targetInstructionObjectReferenceDataBlockValue.type === 'nav') {
+        activateWorkspaceSheetTabContainerInstance(targetInstructionObjectReferenceDataBlockValue.target);
+      } else if (targetInstructionObjectReferenceDataBlockValue.type === 'cmd') {
+        if (targetInstructionObjectReferenceDataBlockValue.action === 'clear_terminal') {
+          executeTerminalCommandSimulation('clear');
+        } else if (targetInstructionObjectReferenceDataBlockValue.action === 'readme_simulation') {
+          executeTerminalCommandSimulation('cat README.md');
+        }
+      }
+    }
+
+    // Hook Global System hotkeys to trigger command palette instantiation vectors intercept rules
+    window.addEventListener('keydown', (globalKeyboardTriggerEventContextData) => {
+      if ((globalKeyboardTriggerEventContextData.ctrlKey || globalKeyboardTriggerEventContextData.metaKey) && globalKeyboardTriggerEventContextData.key.toLowerCase() === 'k') {
+        globalKeyboardTriggerEventContextData.preventDefault();
+        toggleCommandPaletteModalWindow();
+      }
+
+      // Operational modal navigational mapping checks lines traps selection adjustments paths execution rules
+      if (paletteOverlayWindowViewportContainerNode.classList.contains('active')) {
+        const selectableOptionsCountSize = PALETTE_NAVIGATION_COMMANDS_MATRIX.length;
+        if (globalKeyboardTriggerEventContextData.key === 'ArrowDown') {
+          globalKeyboardTriggerEventContextData.preventDefault();
+          currentSelectedPaletteOptionIndexReferencePointer = (currentSelectedPaletteOptionIndexReferencePointer + 1) % selectableOptionsCountSize;
+          recalculateAndSynchronizePaletteSelectionVisualStatusIndicators();
+        } else if (globalKeyboardTriggerEventContextData.key === 'ArrowUp') {
+          globalKeyboardTriggerEventContextData.preventDefault();
+          currentSelectedPaletteOptionIndexReferencePointer = (currentSelectedPaletteOptionIndexReferencePointer - 1 + selectableOptionsCountSize) % selectableOptionsCountSize;
+          recalculateAndSynchronizePaletteSelectionVisualStatusIndicators();
+        } else if (globalKeyboardTriggerEventContextData.key === 'Enter') {
+          globalKeyboardTriggerEventContextData.preventDefault();
+          executePaletteOptionCommandCallbackIndexReference(currentSelectedPaletteOptionIndexReferencePointer);
+        } else if (globalKeyboardTriggerEventContextData.key === 'Escape') {
+          toggleCommandPaletteModalWindow();
+        }
+      }
+    });
+
+    // Terminate modal palette overlays directly if a mouse pointer registers structural clicks on viewport bounds mask backdrop
+    paletteOverlayWindowViewportContainerNode.addEventListener('click', (eventDataRef) => {
+      if (eventDataRef.target === paletteOverlayWindowViewportContainerNode) toggleCommandPaletteModalWindow();
+    });
+
+    // ════════════════════════════════  ADDITIONAL RUNTIME INTERACTIVE FUNCTIONAL LOGIC CODES ════════════════════════════════
+    // Light/Dark Theme Switcher Pipeline Controller Node
+    function toggleThemeSwitcherPattern() {
+      const currentThemeStateToken = document.documentElement.getAttribute('data-theme') || 'dark';
+      const targetedNewAppliedThemeFlagValueString = currentThemeStateToken === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', targetedNewAppliedThemeFlagValueString);
+    }
+
+    // Calculate Active Document Scroll Reading Progress percentages bounds lines 
+    function recalculateReadingScrollProgressTrackingMetrics() {
+      const currentVisibleCanvasContainerElement = document.querySelector('.editor-canvas.active');
+      const progressIndicatorTargetBarDomPointerNode = document.getElementById('progress-indicator-bar');
+      
+      if (!currentVisibleCanvasContainerElement) {
+        progressIndicatorTargetBarDomPointerNode.style.width = '0%';
+        return;
+      }
+
+      currentVisibleCanvasContainerElement.removeEventListener('scroll', handleActiveElementCanvasScrollTriggerLoopEvent);
+      currentVisibleCanvasContainerElement.addEventListener('scroll', handleActiveElementCanvasScrollTriggerLoopEvent, { passive: true });
+      
+      // Instantly fire calculation wrapper trace parameters verification loop pass execution sequence check
+      handleActiveElementCanvasScrollTriggerLoopEvent.call(currentVisibleCanvasContainerElement);
+    }
+
+    function handleActiveElementCanvasScrollTriggerLoopEvent() {
+      const verticalScrollOffsetPixels = this.scrollTop;
+      const combinedScrollableContentHeightLimit = this.scrollHeight - this.clientHeight;
+      const calculatedPercentageRatioValue = combinedScrollableContentHeightLimit > 0 
+        ? Math.round((verticalScrollOffsetPixels / combinedScrollableContentHeightLimit) * 100) 
+        : 0;
+
+      document.getElementById('progress-indicator-bar').style.width = `${calculatedPercentageRatioValue}%`;
+    }
+
+    // Bind Outbound Form Interaction Validation Verification pipelines 
+    document.getElementById('secure-outbound-form-blueprint').addEventListener('submit', (formEventContext) => {
+      formEventContext.preventDefault();
+      const submissionFeedbackLogContainerNodePointer = document.getElementById('form-execution-feedback-log-node');
+      submissionFeedbackLogContainerNodePointer.style.display = 'block';
+      submissionFeedbackLogContainerNodePointer.textContent = 'Transmitting handshake verification log traces...';
+
+      setTimeout(() => {
+        submissionFeedbackLogContainerNodePointer.textContent = '✓ Communication envelope transmitted to host gateway. Node receiver allocation verified successfully.';
+        formEventContext.target.reset();
+      }, 800);
+    });
+
+    // Mobile Slide-Out Structural Metadata Controller Navigation drawer activation rule assignments 
+    const mobileMenuTriggerActionElementButton = document.getElementById('mobile-drawer-toggle-btn');
+    const structuralSidebarContainerPanelElementNode = document.getElementById('ide-sidebar-node');
+
+    mobileMenuTriggerActionElementButton.addEventListener('click', () => {
+      const stateVerificationFlagToggleBoolean = structuralSidebarContainerPanelElementNode.classList.toggle('open');
+      mobileMenuTriggerActionElementButton.querySelector('i').className = stateVerificationFlagToggleBoolean ? 'ri-menu-fold-line' : 'ri-menu-unfold-line';
+    });
+
+    // Connect real-time character typing filter monitoring routines targeting the blog writeups search entry field element node
+    document.getElementById('blog-search-field-input').addEventListener('input', (inputEventDataRef) => {
+      compileThreatBlogPostsViewportCanvas(inputEventDataRef.target.value);
+    });
+
+    // Footer action visibility scroll element link control rule loop engine
+    window.addEventListener('scroll', () => {
+      document.getElementById('btt').style.opacity = window.scrollY > 400 ? '1' : '0';
+      document.getElementById('btt').style.pointerEvents = window.scrollY > 400 ? 'all' : 'none';
+    }, { passive: true });
+
+    // ════════════════════════════════  SYSTEM APPLICATIONROOT INITIALIZER ANCHOR PIPELINE RUNNER ════════════════════════════════
+    document.addEventListener('DOMContentLoaded', () => {
+      // Execute Dynamic Template Compilations routines thread layers 
+      executeWorkspaceCoreArchitectureCompilation();
+      
+      // Default to display about.md open layout sheet buffer instantly upon canvas parsing finish check
+      activateWorkspaceSheetTabContainerInstance('about_md');
+
+      // Populate initialization terminal entries variables metrics maps checks curves patterns loop configurations logs
+      executeTerminalCommandSimulation('help');
+    });
+  </script>
+</body>
+</html>

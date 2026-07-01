@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sakshith C Shetty — Offensive Security Researcher &amp; Penetration Tester</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    /* ════════════════════════════════   THEME TOKENS ════════════════════════════════ */
+    :root {
+      --bg: #030305;
+      --panel: #0a0a0d;
+      --surface: #0e0e12;
+      --border: #1a1b22;
+      --border-focus: #2d2e3a;
+      --text: #e4e4e7;
+      --text-muted: #61616a;
+      --accent: #d4ff00; /* Radioactive Technical Yellow */
+      --accent-dim: rgba(212, 255, 0, 0.04);
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 14px; background: var(--bg); }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* Subtle Technical background decoration */
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px; pointer-events: none; z-index: -1; opacity: 0.2;
+    }
+
+    a { color: inherit; text-decoration: none; transition: all 0.2s var(--ease); }
+    button { font-family: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+
+    /* ═══ WORKSPACE DASHBOARD GRID ═══ */
+    .dashboard-wrapper {
+      max-width: 1280px; margin: 24px auto; padding: 0 16px;
+      display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start;
+    }
+
+    /* Left Control/Profile Column */
+    .sidebar-panel {
+      display: flex; flex-direction: column; gap: 16px; position: sticky; top: 24px;
+    }
+
+    .brutal-box {
+      background: var(--panel); border: 1px solid var(--border); padding: 20px; border-radius: 4px;
+    }
+    .box-title {
+      font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .box-title::before { content: '■'; font-size: 0.5rem; }
+
+    /* Profile Component Card */
+    .profile-card { text-align: center; position: relative; }
+    .profile-avatar { width: 64px; height: 64px; border: 1px solid var(--border-focus); margin: 0 auto 12px; padding: 4px; }
+    .profile-name { font-size: 1.25rem; font-weight: 700; color: #fff; letter-spacing: -0.01em; }
+    .profile-handle { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 14px; }
+    
+    .status-indicator {
+      display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono);
+      font-size: 0.68rem; text-transform: uppercase; color: var(--accent);
+      background: var(--accent-dim); border: 1px solid rgba(212,255,0,0.2); padding: 4px 10px;
+    }
+    .status-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% {opacity:1} 50% {opacity:0.3} }
+
+    .meta-list { display: flex; flex-direction: column; gap: 8px; font-family: var(--font-mono); font-size: 0.75rem; }
+    .meta-row { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border); padding-bottom: 6px; }
+    .meta-row:last-child { border: none; padding-bottom: 0; }
+    .meta-k { color: var(--text-muted); }
+    .meta-v { color: #fff; font-weight: 600; }
+
+    /* Badges Layout */
+    .badge-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tech-tag {
+      font-family: var(--font-mono); font-size: 0.68rem; padding: 3px 8px;
+      background: var(--surface); border: 1px solid var(--border); color: var(--text);
+    }
+    .tech-tag:hover { border-color: var(--accent); color: var(--accent); }
+
+    .social-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .social-btn {
+      border: 1px solid var(--border); padding: 10px 0; text-align: center;
+      background: var(--surface); font-size: 1.1rem; color: var(--text-muted);
+    }
+    .social-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+    .resume-cta {
+      display: block; width: 100%; text-align: center; font-family: var(--font-mono);
+      font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+      padding: 12px 0; border: 1px solid var(--text); background: #fff; color: #000;
+    }
+    .resume-cta:hover { background: var(--accent); border-color: var(--accent); }
+
+    /* Right Main Console Column */
+    .console-panel { display: flex; flex-direction: column; gap: 16px; }
+
+    /* Operational Workspace Tab System Layout */
+    .workspace-tab-bar {
+      display: flex; background: var(--panel); border: 1px solid var(--border); padding: 4px; gap: 4px;
+    }
+    .workspace-tab {
+      font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase;
+      padding: 8px 16px; color: var(--text-muted); position: relative;
+    }
+    .workspace-tab.active, .workspace-tab:hover { color: var(--accent); background: var(--surface); }
+    .workspace-tab.active::after {
+      content: ''; position: absolute; bottom: 0; left: 16px; right: 16px; height: 2px; background: var(--accent);
+    }
+
+    /* Content Modules Configuration mapping */
+    .content-module { background: var(--panel); border: 1px solid var(--border); padding: 24px; display: none; }
+    .content-module.active { display: block; }
+    
+    .module-heading {
+      font-family: var(--font-mono); font-size: 0.9rem; text-transform: uppercase;
+      color: #fff; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 16px;
+    }
+
+    /* Modular Timeline Grid */
+    .compact-timeline { display: flex; flex-direction: column; gap: 16px; }
+    .timeline-card {
+      border: 1px solid var(--border); background: var(--surface); padding: 16px;
+      display: grid; grid-template-columns: 140px 1fr; gap: 16px;
+    }
+    .timeline-card:hover { border-color: var(--border-focus); background: rgba(255,255,255,0.01); }
+    .tl-time { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); }
+    .tl-role { font-weight: 700; color: #fff; font-size: 1rem; margin-bottom: 2px; }
+    .tl-org { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px; }
+    .tl-body { font-size: 0.88rem; color: var(--text-muted); }
+    .tl-body ul { list-style: none; margin-top: 8px; }
+    .tl-body li { position: relative; padding-left: 12px; margin-bottom: 4px; }
+    .tl-body li::before { content: '▪'; position: absolute; left: 0; color: var(--accent); font-size: 0.5rem; top: 1px; }
+
+    /* Compact Project Cards System layout mapping */
+    .project-row-item {
+      border: 1px solid var(--border); background: var(--surface); padding: 18px;
+      margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .project-row-item:hover { border-color: var(--border-focus); }
+    .proj-info-block { max-width: 75%; }
+    .proj-meta-line { font-family: var(--font-mono); font-size: 0.68rem; color: var(--accent); text-transform: uppercase; margin-bottom: 4px; }
+    .proj-title-text { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .proj-summary { font-size: 0.85rem; color: var(--text-muted); }
+    .proj-action-links { display: flex; gap: 8px; }
+    .btn-tactical-mini {
+      font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase;
+      padding: 6px 12px; border: 1px solid var(--border-focus); color: var(--text);
+    }
+    .btn-tactical-mini:hover { border-color: var(--text); background: var(--surface); }
+    .btn-tactical-mini.active-intent { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+    /* High-Controversy Metrics Bar charts component layout mapping */
+    .stats-card-matrix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+    .stat-mini-box { background: var(--surface); border: 1px solid var(--border); padding: 14px; text-align: center; }
+    .stat-val-giant { font-family: var(--font-mono); font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+    .stat-lbl-short { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-top: 2px; }
+
+    .lang-row-entry { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; font-family: var(--font-mono); font-size: 0.75rem; }
+    .lang-track-line { height: 2px; background: #14141a; width: 100%; position: relative; margin-bottom: 12px; }
+    .lang-fill-line { height: 100%; background: var(--accent); position: absolute; left: 0; top: 0; width: 0; transition: width 1s var(--ease); }
+
+    .graph-shield-mask {
+      background: #000; border: 1px solid var(--border); padding: 8px; max-height: 120px; overflow: hidden;
+    }
+    .graph-shield-mask img { width: 100%; height: 95px; object-fit: contain; mix-blend-mode: screen; }
+
+    /* Form Configuration layers styles maps */
+    .form-blueprint { display: flex; flex-direction: column; gap: 12px; }
+    .form-row-split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .control-group { display: flex; flex-direction: column; gap: 4px; }
+    .control-label { font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; color: var(--text-muted); }
+    .brutal-input-field { background: var(--surface); border: 1px solid var(--border); padding: 10px 12px; color: #fff; font-size: 0.88rem; outline: none; }
+    .brutal-input-field:focus { border-color: var(--border-focus); }
+    
+    /* ═══ RUNTIME SHELL INTERFACE COMPONENT ═══ */
+    .terminal-box { background: #000; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.6; }
+    .term-window-buffer { padding: 16px; min-height: 180px; max-height: 260px; overflow-y: auto; color: #d4d4d8; }
+    .term-row-line { margin-bottom: 2px; }
+    .term-row-line .t-prompt { color: var(--accent); font-weight: 700; }
+    .term-row-line .t-hi { color: var(--accent); }
+    .term-row-line .t-err { color: #f87171; }
+    .term-interactive-row { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-top: 1px solid var(--border); background: #020204; }
+    .term-input-field-entry { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-family: var(--font-mono); font-size: 0.8rem; }
+
+    /* Modal Framework Layer Node Layout */
+    .overlay-modal-mask { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.92); display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.25s var(--ease); }
+    .overlay-modal-mask.active { opacity: 1; pointer-events: all; }
+    .modal-box-frame { background: var(--panel); border: 1px solid var(--border); max-width: 580px; width: 100%; padding: 28px; position: relative; }
+    .modal-close-trigger { position: absolute; top: 16px; right: 16px; color: var(--text-muted); font-family: var(--font-mono); font-size: 0.75rem; }
+    .modal-close-trigger:hover { color: var(--accent); }
+    .modal-img-wrapper { border: 1px solid var(--border); overflow: hidden; background: #000; margin: 16px 0; display: flex; justify-content: center; }
+    .modal-img-wrapper img { max-height: 40vh; object-fit: contain; }
+
+    /* Responsive Architecture breakpoints framework mappings */
+    @media (max-width: 968px) {
+      .dashboard-wrapper { grid-template-columns: 1fr; }
+      .sidebar-panel { position: static; }
+      .timeline-card { grid-template-columns: 1fr; gap: 4px; }
+    }
+    @media (max-width: 480px) {
+      .form-row-split { grid-template-columns: 1fr; }
+      .stats-card-matrix { grid-template-columns: 1fr; }
+      .project-row-item { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .proj-info-block { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="dashboard-wrapper" role="main">
+    
+    <section class="sidebar-panel" aria-label="Operator Profile Coordinates Panel">
+      
+      <div class="brutal-box profile-card">
+        <img class="profile-avatar" src="https://avatars.githubusercontent.com/u/197274423?v=4" alt="Sakshith C Shetty Core Identity Node Asset" width="64" height="64">
+        <h1 class="profile-name">Sakshith C Shetty</h1>
+        <div class="profile-handle">HANDLE // SHADOW-269</div>
+        <div class="status-indicator">
+          <div class="status-dot" aria-hidden="true"></div>
+          <span>Active Operations Mode</span>
+        </div>
+      </div>
+
+      <div class="brutal-box">
+        <div class="box-title">System Metrics</div>
+        <div class="meta-list">
+          <div class="meta-row"><span class="meta-k">Focus:</span><span class="meta-v">Web · API · Mobile</span></div>
+          <div class="meta-row"><span class="meta-k">Location:</span><span class="meta-v">Mangaluru, IN</span></div>
+          <div class="meta-row"><span class="meta-k">Platform:</span><span class="meta-v">Bugcrowd Hunter</span></div>
+          <div class="meta-row"><span class="meta-k">Queue Ingest:</span><span class="meta-v" style="color:var(--accent);">OPEN</span></div>
+        </div>
+      </div>
+
+      <div class="brutal-box">
+        <div class="box-title">Tactical Toolset</div>
+        <div class="badge-cloud">
+          <span class="tech-tag">Burp Suite Pro</span><span class="tech-tag">Nmap Engine</span>
+          <span class="tech-tag">Frida Tool</span><span class="tech-tag">JADX Reversing</span>
+          <span class="tech-tag">Python Scripting</span><span class="tech-tag">OWASP Registry</span>
+          <span class="tech-tag">Docker Ingress</span><span class="tech-tag">Nuclei Automation</span>
+        </div>
+      </div>
+
+      <div class="social-row" role="list" aria-label="Direct Node Link Target Points Row">
+        <a href="https://github.com/shadow269" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="GitHub Target Reference" role="listitem"><i class="ri-github-fill"></i></a>
+        <a href="https://linkedin.com/in/shadow269" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="LinkedIn Target Reference" role="listitem"><i class="ri-linkedin-fill"></i></a>
+        <a href="mailto:contact@shadow269.in" class="social-btn" aria-label="Direct Outbound Channel Pipeline Mail Ingest" role="listitem"><i class="ri-mail-line"></i></a>
+      </div>
+
+      <a href="#" class="resume-cta" download><i class="ri-download-line"></i> Download CV Blueprint</a>
+    </section>
+
+    <section class="console-panel" aria-label="Main Operational Core Console Console Streams Workspace View">
+      
+      <nav class="workspace-tab-bar" aria-label="Workspace Module Configuration Filters Controls">
+        <button class="workspace-tab active" data-target="mod-history">01. Log History</button>
+        <button class="workspace-tab" data-target="mod-exploits">02. Exploit Repos</button>
+        <button class="workspace-tab" data-target="mod-telemetry">03. Live Telemetry</button>
+        <button class="workspace-tab" data-target="mod-transmission">04. Transmission</button>
+      </nav>
+
+      <div class="content-module active" id="mod-history">
+        <div class="module-heading">Operational Chronology Records</div>
+        <div class="compact-timeline" role="list">
+          <div class="timeline-card" role="listitem">
+            <div class="tl-time">2026 — PRESENT</div>
+            <div>
+              <h3 class="tl-role">Penetration Tester Operations</h3>
+              <div class="tl-org">Bugcrowd Live Target Exploration Grids</div>
+              <p class="tl-body">Isolating authorization token mutations, state tracking faults, and multi-tenant perimeter vulnerabilities across complex distributed systems infrastructures.</p>
+            </div>
+          </div>
+          <div class="timeline-card" role="listitem">
+            <div class="tl-time">2025 — 2026</div>
+            <div>
+              <h3 class="tl-role">Cybersecurity Specialist Intern</h3>
+              <div class="tl-org">CyberSapiens Advisory Labs Matrix</div>
+              <p class="tl-body">Conducted architecture assessment sprints targeting cloud microservice clusters and mobile apps. Reversed native ARM tracking rules and built payload fuzzers scripts.</p>
+            </div>
+          </div>
+          <div class="timeline-card" role="listitem">
+            <div class="tl-time">2022 — 2025</div>
+            <div>
+              <h3 class="tl-role">Bachelor of Computer Applications</h3>
+              <div class="tl-org">Mangalore University Engineering Faculty Node</div>
+              <p class="tl-body">Graduated with absolute core specialization layout paths mapping computational systems theory, query optimization paradigms, and logical runtime pipelines configurations.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-module" id="mod-exploits">
+        <div class="module-heading">Built Blueprints &amp; Repositories</div>
+        
+        <div class="project-row-item">
+          <div class="proj-info-block">
+            <div class="proj-meta-line">Computer Vision Engine · AI Integration · 2025</div>
+            <h3 class="proj-title-text">CivicEye Core Architecture Platform</h3>
+            <p class="proj-summary">Integrated image parsing arrays via YOLOv8 models bound into secure PHP endpoints configurations to intentionally mitigate parameter forgery vulnerability vectors parameters check.</p>
+          </div>
+          <div class="proj-action-links">
+            <a href="https://github.com/SHADOW269/CivicEye" target="_blank" class="btn-tactical-mini active-intent">Source Node</a>
+          </div>
+        </div>
+
+        <div class="project-row-item">
+          <div class="proj-info-block">
+            <div class="proj-meta-line">Offensive Security Repository Script Array Core</div>
+            <h3 class="proj-title-text">CyberSapiens Operations Framework Logs</h3>
+            <p class="proj-summary">Consolidated local script processing utilities registries, validation payloads arrays, and perimeter fuzzing templates tracking rules deployed during active assessments cycles.</p>
+          </div>
+          <div class="proj-action-links">
+            <a href="https://github.com/SHADOW269/CYBERSAPIENS" target="_blank" class="btn-tactical-mini">Repository Base</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-module" id="mod-telemetry">
+        <div class="module-heading">Live Code Git Streams Telemetry Tracker</div>
+        
+        <div class="stats-card-matrix">
+          <div class="stat-mini-box"><div class="stat-val-giant" id="g-repos">—</div><div class="stat-lbl-short">Traces Pool</div></div>
+          <div class="stat-mini-box"><div class="stat-val-giant" id="g-followers">—</div><div class="stat-lbl-short">Subscribers</div></div>
+          <div class="stat-mini-box"><div class="stat-val-giant" id="g-gists">—</div><div class="stat-lbl-short">Gists Delta</div></div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <h4 style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); margin-bottom: 10px; text-transform:uppercase;">Compiler footprint allocation mapping ratio:</h4>
+          <div id="g-langs-render-target"></div>
+        </div>
+
+        <div class="graph-shield-mask">
+          <img src="https://github-readme-activity-graph.vercel.app/graph?username=shadow269&bg_color=0a0a0d&color=d4ff00&line=d4ff00&point=e4e4e7&area=true&hide_border=true" alt="Dynamic Code Activity Evaluation Index Curve Tracker Graph">
+        </div>
+      </div>
+
+      <div class="content-module" id="mod-transmission">
+        <div class="module-heading">Initiate Outbound Scope Transmission Packet</div>
+        <form class="form-blueprint" id="dashboard-contact-form" novalidate>
+          <div class="form-row-split">
+            <div class="control-group">
+              <label class="control-label" for="f-id">Entity Name Identification</label>
+              <input type="text" id="f-id" class="brutal-input-field" placeholder="Tag Identification Target" required>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="f-email">Return Channel Address Address</label>
+              <input type="email" id="f-email" class="brutal-input-field" placeholder="identity@network.local" required autocomplete="email">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="f-msg">Scope Log Data Parameters Metadata</label>
+            <textarea id="f-msg" class="brutal-input-field brutal-textarea" rows="4" placeholder="Detail operational target configurations bounds rules limits parameters..." required></textarea>
+          </div>
+          <button type="submit" class="resume-cta" style="width: max-content; padding: 10px 24px;" id="f-submit-trigger">Transmit Parameters Pack</button>
+          <div id="f-feedback-log-node" style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent); display:none; margin-top:8px;" role="alert" aria-live="polite"></div>
+        </form>
+      </div>
+
+      <div class="terminal-box" id="terminal" role="region" aria-label="Persistent Interaction Shell Frame Interface">
+        <div class="term-bar2">
+          <div class="term-dots" aria-hidden="true"><div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div></div>
+          <span class="term-bar2-title">shadow269@dashboard_runtime_shell:~</span>
+        </div>
+        <div class="term-window-buffer" id="shell-buffer-stream-target" aria-live="polite">
+          <div class="term-row-line">Dashboard core framework shell connection online. Ingesting memory vectors maps.</div>
+          <div class="term-row-line"><span class="t-muted">Enter <span class="t-hi">'help'</span> to pull standard capabilities parameters directories lists indexes.</span></div>
+          <div>&nbsp;</div>
+        </div>
+        <div class="term-interactive-row">
+          <span class="term-input-prompt" aria-hidden="true">shadow269@portfolio:~$</span>
+          <input type="text" class="term-input-field-entry" id="shell-interactive-input-pointer" placeholder="Input execution flag target..." autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Console Core Input Line Entry Ingestion View">
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    // ════════════════════════════════  WORKSPACE DYNAMIC TAB AND DATA ROUTING CONTROLLERS ════════════════════════════════
+    const dashboardTabButtonsCollectionList = document.querySelectorAll('.workspace-tab');
+    const contentModulesCollectionList = document.querySelectorAll('.content-module');
+
+    dashboardTabButtonsCollectionList.forEach(tabButton => {
+      tabButton.addEventListener('click', () => {
+        dashboardTabButtonsCollectionList.forEach(btn => btn.classList.remove('active'));
+        contentModulesCollectionList.forEach(mod => mod.classList.remove('active'));
+
+        tabButton.classList.add('active');
+        document.getElementById(tabButton.getAttribute('data-target')).classList.add('active');
+        
+        // Trigger calculation layouts widths metrics tracking re-flow dynamically on visual updates parameters check
+        if(tabButton.getAttribute('data-target') === 'mod-telemetry') {
+          setTimeout(() => { document.querySelectorAll('.lang-fill-line').forEach(el => el.style.width = el.getAttribute('data-pct-target') + '%'); }, 50);
+        }
+      });
+    });
+
+    // ════════════════════════════════  VIRTUAL SYSTEM CONSOLE MODULE DICTIONARY ════════════════════════════════
+    const SHELL_CORE_DIRECTIVES_REGISTRY = {
+      help() { return "Available parameters check flags:<br>[history]  — Output chronology timeline logging variables.<br>[exploits] — Isolate built framework repositories tracking indices.<br>[clear]    — Purge interface output stream buffer layout lines."; },
+      history() { return "Operational log index matches 3 primary target timeline chronology rows listed above inside visual workspace matrix panel."; },
+      exploits() { return "Active repositories matched blueprints profiles: CivicEye Processing CV Core, CyberSapiens Manual Pentest payload templates tracking tools."; },
+      clear() { document.getElementById('shell-buffer-stream-target').innerHTML = ''; return ''; }
+    };
+
+    const shellBufferOutputContainerTargetElement = document.getElementById('shell-buffer-stream-target');
+    const shellInputEntryFieldElementPointerNode = document.getElementById('shell-interactive-input-pointer');
+
+    shellInputEntryFieldElementPointerNode.addEventListener('keydown', (eventContextData) => {
+      if (eventContextData.key === 'Enter') {
+        const rawSanitizedInputTextStringValue = shellInputEntryFieldElementPointerNode.value.trim();
+        if (!rawSanitizedInputTextStringValue) return;
+
+        const echoLineWrapperElementNode = document.createElement('div');
+        echoLineWrapperElementNode.className = 'term-row-line';
+        echoLineWrapperElementNode.innerHTML = `<span class="term-input-prompt">shadow269@portfolio:~$ </span><span style="color:#fff;"></span>`;
+        echoLineWrapperElementNode.querySelector('span:last-child').textContent = rawSanitizedInputTextStringValue;
+        shellBufferOutputContainerTargetElement.appendChild(echoLineWrapperElementNode);
+
+        const directiveParsingLookupKeyToken = rawSanitizedInputTextStringValue.toLowerCase().split(' ')[0];
+        const executableCallbackFunctionPointer = SHELL_CORE_DIRECTIVES_REGISTRY[directiveParsingLookupKeyToken];
+
+        const responseLineWrapperElementNode = document.createElement('div');
+        responseLineWrapperElementNode.className = 'term-row-line';
+
+        if (executableCallbackFunctionPointer) {
+          const resolvedStringOutputValueText = executableCallbackFunctionPointer();
+          if (directiveParsingLookupKeyToken !== 'clear') {
+            responseLineWrapperElementNode.innerHTML = resolvedStringOutputValueText;
+            shellBufferOutputContainerTargetElement.appendChild(responseLineWrapperElementNode);
+          }
+        } else {
+          responseLineWrapperElementNode.innerHTML = `<span class="t-err">Error flag status unmapped: Register context parameter matching [${directiveParsingLookupKeyToken}] has failed validation constraints execution mapping checks. Input 'help'.</span>`;
+          shellBufferOutputContainerTargetElement.appendChild(responseLineWrapperElementNode);
+        }
+
+        shellInputEntryFieldElementPointerNode.value = '';
+        shellBufferOutputContainerTargetElement.scrollTop = shellBufferOutputContainerTargetElement.scrollHeight;
+      }
+    });
+
+    // Outbound form submission pipeline controller 
+    document.getElementById('dashboard-contact-form').addEventListener('submit', (eventPayload) => {
+      eventPayload.preventDefault();
+      const feedbackMessageContainerDOMNode = document.getElementById('f-feedback-log-node');
+      const transmissionTriggerButtonNode = document.getElementById('f-submit-trigger');
+
+      transmissionTriggerButtonNode.disabled = true;
+      transmissionTriggerButtonNode.textContent = 'Transmitting Log Stream Packet Core data...';
+
+      setTimeout(() => {
+        feedbackMessageContainerDOMNode.style.display = 'block';
+        feedbackMessageContainerDOMNode.textContent = '✓ Configuration data stream transmission successfully established with target receiver routing link layer module.';
+        transmissionTriggerButtonNode.textContent = 'Transmission Locked ✓';
+        eventPayload.target.reset();
+      }, 650);
+    });
+
+    // ════════════════════════════════  ASYNCHRONOUS GIT METRICS TELEMETRY LOG INGESTION ════════════════════════════════
+    async function ingestLiveGitHubProfileMetricsStreams() {
+      try {
+        const publicTargetUserProfileToken = 'shadow269';
+        const [profileStreamResponsePayload, repositoriesStreamResponsePayload] = await Promise.all([
+          fetch(`https://api.github.com/users/${publicTargetUserProfileToken}`),
+          fetch(`https://api.github.com/users/${publicTargetUserProfileToken}/repos?per_page=100&sort=pushed`)
+        ]);
+
+        if (!profileStreamResponsePayload.ok) throw new Error('API request access sequence termination or processing logic limits hit.');
+        
+        const profileJsonObjectDataStructure = await profileStreamResponsePayload.json();
+        const repositoriesArrayDataStructure = repositoriesStreamResponsePayload.ok ? await repositoriesStreamResponsePayload.json() : [];
+
+        document.getElementById('g-repos').textContent = profileJsonObjectDataStructure.public_repos ?? '—';
+        document.getElementById('g-followers').textContent = profileJsonObjectDataStructure.followers ?? '—';
+        document.getElementById('g-gists').textContent = profileJsonObjectDataStructure.public_gists ?? '—';
+
+        const compilerLanguageAllocationWeightCounterMap = {};
+        repositoriesArrayDataStructure.forEach(repo => {
+          if (repo.language) {
+            compilerLanguageAllocationWeightCounterMap[repo.language] = (compilerLanguageAllocationWeightCounterMap[repo.language] || 0) + 1;
+          }
+        });
+
+        const sortedLanguageEntriesCollectionTuples = Object.entries(compilerLanguageAllocationWeightCounterMap).sort((alpha, beta) => beta[1] - alpha[1]).slice(0, 3);
+        const processingCombinedTotalSummationValue = sortedLanguageEntriesCollectionTuples.reduce((sum, item) => sum + item[1], 0);
+
+        const languageContainerElementAnchorDomPointer = document.getElementById('g-langs-render-target');
+        if (sortedLanguageEntriesCollectionTuples.length && processingCombinedTotalSummationValue) {
+          languageContainerElementAnchorDomPointer.innerHTML = sortedLanguageEntriesCollectionTuples.map(([name, val]) => {
+            const calculatedPercentageRatio = Math.round((val / processingCombinedTotalSummationValue) * 100);
+            return `
+              <div class="lang-row-entry"><span>${name}</span><span style="color:var(--accent);">${calculatedPercentageRatio}%</span></div>
+              <div class="lang-track-line"><div class="lang-fill-line" data-pct-target="${calculatedPercentageRatio}"></div></div>
+            `;
+          }).join('');
+        } else {
+          languageContainerElementAnchorDomPointer.innerHTML = '<span style="color:var(--text-muted); font-size:0.75rem; font-family:var(--font-mono);">No compilable language metrics vectors returned in context scope query checks profiles trees.</span>';
+        }
+
+      } catch (catchInstanceErrorObjectValue) {
+        console.warn('Telemetry Stream Fetch Handshake Intercept: Placeholder metrics allocated directly to layout boundaries.', catchInstanceErrorObjectValue);
+        ['g-repos', 'g-followers', 'g-gists'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = '—'; });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      ingestLiveGitHubProfileMetricsStreams();
+    });
+  </script>
+</body>
+</html>

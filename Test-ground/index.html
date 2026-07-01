@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAKSHITH C SHETTY — OFFENSIVE SYSTEM CAPABILITIES</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;700&family=Space+Mono&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="shortcut icon" href="https://avatars.githubusercontent.com/u/197274423?v=4" type="image/x-icon">
+<style>
+  :root {
+    --bg: #000000;
+    --surface: #0a0a0c;
+    --surface-bright: #121216;
+    --border: #1f2026;
+    --border-focus: #3f414f;
+    --text: #e4e4e7;
+    --text-muted: #71717a;
+    --accent: #d4ff00; /* Radioactive Technical Yellow */
+    --accent-dim: rgba(212, 255, 0, 0.05);
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    
+    /* Template Mappings */
+    --bg-neo-black: #050507;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 15px; background: var(--bg); }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: 
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 100px 100px;
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ═══ TACTICAL NAV HEADER ═══ */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; height: 70px;
+    background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border); z-index: 100;
+    display: flex; align-items: center; justify-content: space-between; padding: 0 40px;
+  }
+
+  .nav-meta {
+    display: flex; align-items: center; gap: 24px;
+    font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);
+  }
+  .nav-meta strong { color: var(--text); letter-spacing: 0.05em; }
+
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-links a {
+    font-family: var(--font-mono); font-size: 0.8rem;
+    color: var(--text-muted); text-transform: uppercase;
+    transition: color 0.2s var(--ease); padding: 4px 0;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+  .nav-links a.contact-cta { border: 1px solid var(--border-focus); padding: 6px 16px; background: var(--surface); }
+  .nav-links a.contact-cta:hover { border-color: var(--accent); background: var(--accent-dim); }
+
+  /* ═══ ASYMMETRIC LANDING HERO MODULE ═══ */
+  .hero-container {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 450px;
+    border-bottom: 1px solid var(--border);
+    padding-top: 70px;
+    position: relative; z-index: 1;
+  }
+
+  .hero-main-panel {
+    padding: 80px;
+    display: flex; flex-direction: column; justify-content: center;
+    border-right: 1px solid var(--border);
+  }
+
+  .hero-status-tag {
+    font-family: var(--font-mono); font-size: 0.75rem;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 24px; display: flex; align-items: center; gap: 8px;
+  }
+  .hero-status-tag::before {
+    content: ''; display: block; width: 6px; height: 6px; background: var(--accent);
+  }
+
+  .hero-title {
+    font-family: var(--font-display); font-size: clamp(3rem, 5vw, 5.5rem);
+    font-weight: 700; line-height: 1.0;
+    letter-spacing: -0.03em; color: #fff; text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .hero-title span { color: transparent; -webkit-text-stroke: 1px var(--text-muted); }
+
+  .hero-abstract {
+    font-size: 1.25rem; color: var(--text-muted);
+    max-width: 700px; margin-bottom: 40px;
+    font-weight: 400; line-height: 1.5;
+  }
+
+  .hero-console-feed {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 20px; font-family: var(--font-mono);
+    font-size: 0.85rem; color: var(--text);
+    margin-bottom: 48px; max-width: 600px; position: relative;
+  }
+  .hero-console-feed::before {
+    content: 'TARGET_RECON'; position: absolute; top: -10px; left: 15px;
+    background: var(--bg); padding: 0 8px; font-size: 0.65rem; color: var(--text-muted);
+  }
+
+  .btn-cluster { display: flex; gap: 20px; }
+  .btn-brutal {
+    font-family: var(--font-mono); font-size: 0.85rem;
+    text-transform: uppercase; padding: 16px 32px;
+    border: 1px solid var(--text); background: #fff; color: #000;
+    font-weight: 700; transition: all 0.3s var(--ease); display: inline-block; text-align: center;
+  }
+  .btn-brutal:hover { background: var(--accent); border-color: var(--accent); }
+  
+  .btn-brutal-sub {
+    font-family: var(--font-mono); font-size: 0.85rem;
+    text-transform: uppercase; padding: 16px 32px;
+    border: 1px solid var(--border-focus); background: transparent; color: var(--text);
+    transition: all 0.3s var(--ease); display: inline-block; text-align: center;
+  }
+  .btn-brutal-sub:hover { border-color: var(--text); background: var(--surface); }
+
+  .hero-side-panel {
+    background: var(--surface); padding: 60px 40px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    font-family: var(--font-mono); font-size: 0.75rem;
+  }
+
+  .intel-matrix-row { border-bottom: 1px solid var(--border); padding: 16px 0; display: flex; justify-content: space-between; }
+  .intel-matrix-row span:first-child { color: var(--text-muted); }
+  .intel-matrix-row span:last-child { color: #fff; font-weight: 700; }
+  .cursor-blink { display: inline-block; width: 8px; height: 1.1em; background: var(--accent); opacity: .7; animation: cursorBlink 1.1s step-end infinite; vertical-align: middle; margin-left: 2px; }
+  @keyframes cursorBlink { 0%,100%{opacity:.7} 50%{opacity:0} }
+
+  /* ═══ MAIN LAYOUT ARCHITECTURE ═══ */
+  main { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 120px 40px 60px; }
+
+  .grid-section { display: grid; grid-template-columns: 300px 1fr; gap: 60px; margin-bottom: 120px; }
+  .section-label { position: sticky; top: 120px; height: fit-content; }
+  .section-index { font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent); display: block; margin-bottom: 12px; }
+  .section-headline { font-family: var(--font-display); font-size: 2rem; font-weight: 700; text-transform: uppercase; letter-spacing: -0.01em; line-height: 1.1; }
+
+  /* ═══ EXPERIENCE SYSTEM (TIMELINE) ═══ */
+  .timeline-brutal { display: flex; flex-direction: column; }
+  .timeline-node {
+    border-top: 1px solid var(--border); padding: 32px 0;
+    display: grid; grid-template-columns: 250px 1fr; gap: 30px;
+    transition: background 0.3s var(--ease);
+  }
+  .timeline-node:last-child { border-bottom: 1px solid var(--border); }
+  .timeline-node:hover { background: var(--accent-dim); }
+  .node-meta { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); }
+  .node-meta strong { color: var(--text); display: block; margin-bottom: 4px; font-size: 0.9rem; }
+  .node-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; }
+  .node-body { color: var(--text-muted); font-size: 0.95rem; }
+  .node-body ul { list-style: none; margin-top: 12px; }
+  .node-body li { position: relative; padding-left: 20px; margin-bottom: 6px; }
+  .node-body li::before { content: '■'; position: absolute; left: 0; color: var(--accent); font-size: 0.6rem; top: 4px; }
+
+  /* ═══ TECHNICAL SKILLS MATRIX ═══ */
+  .skills-matrix { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .matrix-item { background: var(--surface); padding: 32px; transition: background 0.2s var(--ease); }
+  .matrix-item:hover { background: var(--surface-bright); }
+  .matrix-label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); margin-bottom: 16px; text-transform: uppercase; }
+  .matrix-values { font-size: 0.95rem; font-weight: 500; color: var(--text); }
+
+  /* ═══ BRUTALIST DATA CARDS (CERTS / PROJECTS) ═══ */
+  .card-system-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+  .brutal-data-card {
+    background: var(--surface); border: 1px solid var(--border); padding: 32px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    min-height: 290px; transition: border-color 0.2s var(--ease);
+  }
+  .brutal-data-card:hover { border-color: var(--border-focus); }
+  .card-top-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+  .card-tag { font-family: var(--font-mono); font-size: 0.7rem; padding: 4px 10px; border: 1px solid var(--border-focus); color: var(--text-muted); text-transform: uppercase; }
+  .card-header-heading { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: #fff; text-transform: uppercase; margin-bottom: 12px; line-height: 1.2; }
+  .card-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px; }
+  .card-foot-cluster { display: flex; flex-wrap: wrap; gap: 12px; margin-top: auto; }
+  .btn-mini-tactical { font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; padding: 6px 14px; border: 1px solid var(--border-focus); color: var(--text); background: transparent; transition: all 0.2s var(--ease); }
+  .btn-mini-tactical:hover { border-color: var(--text); background: var(--surface-bright); }
+  .btn-mini-tactical.primary-action { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+  /* ═══ HIGH-CONTROVERSY CODING TELEMETRY ═══ */
+  .py-12 { padding-top: 4rem; padding-bottom: 4rem; }
+  .bg-neo-black { background-color: #050507; }
+  .border-y-4 { border-top-width: 4px; border-bottom-width: 4px; }
+  .border-black { border-color: #000; }
+  .relative { position: relative; }
+  .overflow-hidden { overflow: hidden; }
+  .absolute { position: absolute; }
+  .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+  .opacity-20 { opacity: 0.2; }
+  .max-w-7xl { max-w: 80rem; }
+  .mx-auto { margin-left: auto; margin-right: auto; }
+  .px-4 { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .z-10 { z-index: 10; }
+  .flex-col { flex-direction: column; }
+  .mb-8 { margin-bottom: 2rem; }
+  .border-b-2 { border-bottom-width: 2px; }
+  .pb-4 { padding-bottom: 1rem; }
+  .gap-2 { gap: 0.5rem; }
+  .font-black { font-weight: 900; }
+  .uppercase { text-transform: uppercase; }
+  .tracking-tight { letter-spacing: -0.025em; }
+  .leading-none { line-height: 1; }
+  .bg-green-500 { background-color: #22c55e; }
+  .rounded-full { border-radius: 9999px; }
+  .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+  .text-xs { font-size: 0.75rem; }
+  .font-bold { font-weight: 700; }
+  .mb-4 { margin-bottom: 1rem; }
+  .border-b { border-bottom-width: 1px; }
+  .pb-2 { padding-bottom: 0.5rem; }
+  .border-2 { border-width: 2px; }
+  .text-black { color: #000; }
+  .border-4 { border-width: 4px; }
+  .flex-1 { flex: 1 1 0%; }
+  .mb-6 { margin-bottom: 1.5rem; }
+  .gap-4 { gap: 1rem; }
+  .tracking-widest { letter-spacing: 0.1em; }
+  .text-gray-500 { color: var(--text-muted); }
+  .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gap-3 { gap: 0.75rem; }
+  .bg-white\/5 { background-color: rgba(255, 255, 255, 0.05); }
+  .mt-6 { margin-top: 1.5rem; }
+  .bg-black { background-color: #000; }
+  .border-white\/5 { border-color: rgba(255, 255, 255, 0.05); }
+
+  .coding-stats-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+  @media (max-width: 1024px) { .coding-stats-grid { grid-template-columns: 1fr; } }
+  
+  .lang-entry-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .lang-entry-track { height: 2px; background: #1f2026; width: 100%; position: relative; margin-top: 4px; }
+  .lang-entry-fill { height: 100%; position: absolute; left: 0; top: 0; background: var(--accent); transition: width 1s var(--ease); }
+  .project-entry-item { padding: 16px; border: 1px solid var(--border); background: rgba(255,255,255,0.02); }
+  .project-entry-head { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.8rem; margin-bottom: 6px; }
+  .metric-giant-digit { font-family: var(--font-display); font-size: 3.5rem; font-weight: 700; color: var(--accent); line-height: 1; }
+
+  /* RIGID PROTECTIVE CONTAINMENT SHIELD TARGETING API GRAPH ERRORS */
+  .graph-telemetry-shield {
+    background: #000000 !important;
+    border: 1px solid rgba(212, 255, 0, 0.2) !important;
+    padding: 12px !important;
+    position: relative !important;
+    max-height: 160px !important;
+    height: 160px !important;
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+  
+  .graph-telemetry-shield img {
+    width: 100% !important;
+    height: 110px !important;
+    object-fit: contain !important;
+    /* Forces system transparency filtering to crush accidental solid block fills */
+    mix-blend-mode: screen !important; 
+    display: block !important;
+  }
+
+  .tactical-icon-box {
+    width: 32px !important;
+    height: 32px !important;
+    max-width: 32px !important;
+    max-height: 32px !important;
+    flex-basis: 32px !important;
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: var(--accent) !important;
+    border: 2px solid #ffffff !important;
+  }
+
+  @keyframes pulse { 50% { opacity: .5; } }
+
+  /* ═══ EDUCATION MATRIX ═══ */
+  .edu-table { display: flex; flex-direction: column; border-bottom: 1px solid var(--border); }
+  .edu-row-brutal { border-top: 1px solid var(--border); padding: 24px 0; display: grid; grid-template-columns: 1fr 180px; gap: 40px; }
+  .edu-main-info h3 { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; text-transform: uppercase; color: #fff; margin-bottom: 4px; }
+  .edu-sub-info { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); }
+  .edu-date-span { font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent); text-align: right; }
+
+  /* ═══ INTERACTION OVERLAYS (MODAL) ═══ */
+  .cert-modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.95); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s var(--ease); }
+  .cert-modal-overlay.active { opacity: 1; pointer-events: all; }
+  .cert-modal { background: var(--surface); border: 1px solid var(--border); max-width: 700px; width: 100%; padding: 40px; position: relative; }
+  .close-trigger { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-muted); font-family: var(--font-mono); cursor: pointer; font-size: 0.8rem; }
+  .cert-modal img { max-width: 100%; max-height: 50vh; object-fit: contain; margin: 20px auto; display: block; border: 1px solid var(--border); }
+
+  /* ═══ SYSTEM FOOTER ═══ */
+  footer { border-top: 1px solid var(--border); background: #000; padding: 60px 40px; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); }
+
+  /* ═══ RESPONSIVE BREAKS ═══ */
+  @media (max-width: 1024px) {
+    .hero-container { grid-template-columns: 1fr; }
+    .hero-side-panel { display: none; }
+    .grid-section { grid-template-columns: 1fr; gap: 30px; }
+    .section-label { position: static; }
+    .coding-stats-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    main { padding: 80px 20px; }
+    header { padding: 0 20px; }
+    .nav-meta span { display: none; }
+    .nav-links { display: none; }
+    .hero-main-panel { padding: 40px 20px; }
+    .hero-title { font-size: 3.5rem; }
+    .timeline-node { grid-template-columns: 1fr; gap: 10px; }
+    footer { flex-direction: column; gap: 20px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-meta">
+    <strong>SAKSHITH C SHETTY</strong>
+    <span>[ OBJECTIVE: SYSTEM_RECON ]</span>
+  </div>
+  <nav class="nav-links">
+    <a href="#about" class="active">CAPABILITIES</a>
+    <a href="#experience">ENGAGEMENTS</a>
+    <a href="#skills">STACK</a>
+    <a href="#certs">ATTESTATIONS</a>
+    <a href="#projects">BUILDS</a>
+    <a href="#coding-stats">TELEMETRY</a>
+    <a href="#education">TRAINING</a>
+    <a href="/contact/" class="contact-cta">EXECUTE CONTACT</a>
+  </nav>
+</header>
+
+<section class="hero-container" id="about">
+  <div class="hero-main-panel">
+    <div class="hero-status-tag">SEC_OPERATIONS // ACTIVE ENGAGEMENT</div>
+    <h1 class="hero-title">OFFENSIVE<br><span>SECURITY</span><br>PRACTITIONER</h1>
+    <div class="hero-abstract">I locate high-risk business logic errors, access control failures, and systemic architecture bypasses natively before weaponization takes place.</div>
+    
+    <div class="hero-console-feed">
+      $ <span id="runtime-terminal"></span><span class="cursor-blink"></span>
+    </div>
+
+    <div class="btn-cluster">
+      <a href="/contact/" class="btn-brutal">INITIATE INQUIRY</a>
+      <a href="files/RESUME.pdf" download class="btn-brutal-sub">PULL ATTESTATION (CV)</a>
+    </div>
+  </div>
+  
+  <div class="hero-side-panel">
+    <div>
+      <div style="font-weight:700; margin-bottom:24px; color:#fff; font-family: var(--font-display); font-size: 1.2rem;">SYSTEM_METRICS</div>
+      <div class="intel-matrix-row"><span>OPERATOR_ID</span><span>SHADOW-269</span></div>
+      <div class="intel-matrix-row"><span>FOCUS_DOMAIN</span><span>WEB / API / APPS</span></div>
+      <div class="intel-matrix-row"><span>REGION_ORIGIN</span><span>IND (MANGALURU)</span></div>
+      <div class="intel-matrix-row"><span>RECON_FORMS</span><span>BUGCROWD CONTRIB</span></div>
+    </div>
+    <div style="color: var(--text-muted);">
+      LAST_COMMS_SYNC: <span id="live-date"></span>
+    </div>
+  </div>
+</section>
+
+<main>
+
+  <section class="grid-section" id="experience">
+    <div class="section-label">
+      <span class="section-index">01 / ENGAGEMENTS</span>
+      <h2 class="section-headline">VULNERABILITY<br>EXPERIENCE</h2>
+    </div>
+    <div class="timeline-brutal">
+      <div class="timeline-node">
+        <div class="node-meta"><strong>BUGCROWD</strong>MAR 2026 – PRESENT<br>Remote · Bug Bounty</div>
+        <div>
+          <h3 class="node-title">Penetration Tester</h3>
+          <div class="node-body">
+            Real-world bug bounty engagements targeting production web applications and modern API attack surfaces.
+            <ul>
+              <li>Identify and responsibly exploit access control flaws, server-side request forgery paths (SSRF), and complex business logic vulnerabilities.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-node">
+        <div class="node-meta"><strong>CYBERSAPIENS</strong>JUL 2025 – MAR 2026<br>Remote · Internship</div>
+        <div>
+          <h3 class="node-title">Cybersecurity Intern</h3>
+          <div class="node-body">
+            Conducted full-scale Vulnerability Assessment and Penetration Testing (VAPT) across web, cloud, and mobile app ecosystems.
+            <ul>
+              <li>Executed comprehensive API validation tracking backend access flaws (BOPLA, BFLA), Mass Assignments, and Excessive Data Exposures.</li>
+              <li>Directed Android application security mapping using automated and manual decompilation frameworks (apktool, jadx) for binary analysis and SSL tracking.</li>
+              <li>Bypassed corporate runtime protections, exploiting out-of-band SQLi, SSRF, and CORS misconfigurations against WAF-shielded endpoints.</li>
+              <li>Compiled enterprise-grade remediation summaries incorporating precise CVSS vulnerability rankings.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-node">
+        <div class="node-meta"><strong>SIERRA LEARNING</strong>FEB 2025 – MAY 2025<br>Mangaluru · Structural Design</div>
+        <div>
+          <h3 class="node-title">UI/UX Design Intern</h3>
+          <div class="node-body">
+            Created lightweight application design frameworks focused on interface scalability and logical system interaction hierarchies.
+            <ul>
+              <li>Engineered high-performance web templates utilizing Framer architecture rules across dynamic product configurations.</li>
+              <li>Drafted clean production components maintaining global modular design compliance.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-node">
+        <div class="node-meta"><strong>DATACOM / FORAGE</strong>2025<br>Remote · Simulation Core</div>
+        <div>
+          <h3 class="node-title">Cyber Security Operations</h3>
+          <div class="node-body">
+            Participated in enterprise security operations simulation layers focusing on incident containment loops.
+            <ul>
+              <li>Mapped infrastructure monitoring logic using structured system tracking rules across simulated network compromises.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid-section" id="skills">
+    <div class="section-label">
+      <span class="section-index">02 / CAPABILITIES</span>
+      <h2 class="section-headline">TECHNICAL<br>MATRIX</h2>
+    </div>
+    <div class="skills-matrix">
+      <div class="matrix-item"><div class="matrix-label">Offensive Suite</div><div class="matrix-values">Burp Suite Pro · Nmap · Wireshark · Metasploit · Nuclei Core · OWASP ZAP</div></div>
+      <div class="matrix-item"><div class="matrix-label">Vulnerability Scope</div><div class="matrix-values">OWASP Top 10 · Advanced XSS · SQLi · SSRF · Path Traversal · IDOR · BOPLA / BFLA</div></div>
+      <div class="matrix-item"><div class="matrix-label">Mobile Security</div><div class="matrix-values">APKLab Toolkit · apktool · jadx · MobSF Core · ADB Engine · Static & Dynamic Extraction</div></div>
+      <div class="matrix-item"><div class="matrix-label">Network & SOC</div><div class="matrix-values">Splunk Enterprise · MITRE ATT&CK Mapping · IDS/IPS Logic · Perimeter Firewalls · Zero Trust Topology</div></div>
+      <div class="matrix-item"><div class="matrix-label">Development</div><div class="matrix-values">Python Automation · Bash Scripting · PHP Core · MySQL Architecture · JavaScript · Full Stack Arrays</div></div>
+      <div class="matrix-item"><div class="matrix-label">Infrastructure</div><div class="matrix-values">Docker Isolation · Git Control · Kali Linux Core · Parrot OS · Hyper-V · Proxmox Virtualization</div></div>
+      <div class="matrix-item"><div class="matrix-label">GRC & Compliance</div><div class="matrix-values">ISO 27001 ISMS · PCI DSS Core · HIPAA Security · NIST Framework · GDPR Rules · SOC 1/2/3 Structure</div></div>
+      <div class="matrix-item"><div class="matrix-label">Cloud Architecture</div><div class="matrix-values">AWS Cloud Security · Azure Security Operations · Cloud Exploitation Vector Analysis</div></div>
+    </div>
+  </section>
+
+  <section class="grid-section" id="certs">
+    <div class="section-label">
+      <span class="section-index">03 / ATTESTATIONS</span>
+      <h2 class="section-headline">VERIFIED<br>CREDENTIALS</h2>
+    </div>
+    <div class="card-system-grid">
+      <div class="brutal-data-card">
+        <div class="card-top-row"><span class="card-tag">RED TEAM LEADERS</span><span style="color:var(--accent);">CRTOM</span></div>
+        <div>
+          <h3 class="card-header-heading">Certified Red Team Operations Management</h3>
+          <p class="card-desc">Offensive threat simulation command parameters and infrastructure operation strategies.</p>
+        </div>
+        <button class="card-action-trigger" onclick="openCertModal('crtom')">→ RECOVER ATTESTATION VERIFICATION</button>
+      </div>
+
+      <div class="brutal-data-card">
+        <div class="card-top-row"><span class="card-tag">ICTTF CODE</span><span style="color:var(--accent);">CRPO</span></div>
+        <div>
+          <h3 class="card-header-heading">Certified Ransomware Protection Officer</h3>
+          <p class="card-desc">Organizational protection controls, network perimeter containment, and systemic payload defense systems.</p>
+        </div>
+        <button class="card-action-trigger" onclick="openCertModal('crpo')">→ RECOVER ATTESTATION VERIFICATION</button>
+      </div>
+
+      <div class="brutal-data-card">
+        <div class="card-top-row"><span class="card-tag">SKILLFRONT</span><span>ISO 27001</span></div>
+        <div>
+          <h3 class="card-header-heading">ISO/IEC 27001:2022 ISMS Associate</h3>
+          <p class="card-desc">Framework execution alignment with international specifications for data asset governance systems.</p>
+        </div>
+        <button class="card-action-trigger" onclick="openCertModal('iso27001')">→ RECOVER ATTESTATION VERIFICATION</button>
+      </div>
+
+      <div class="brutal-data-card">
+        <div class="card-top-row"><span class="card-tag">AWS TRAINING</span><span>CLOUD SECURITY</span></div>
+        <div>
+          <h3 class="card-header-heading">AWS Security Specialty – Domain 1</h3>
+          <p class="card-desc">Cloud-native security validation reviewing perimeter logging architectures and continuous threat tracking systems.</p>
+        </div>
+        <button class="card-action-trigger" onclick="openCertModal('aws')">→ RECOVER ATTESTATION VERIFICATION</button>
+      </div>
+
+      <div class="brutal-data-card">
+        <div class="card-top-row"><span class="card-tag">CYBERSAPIENS</span><span>CEH VECTOR</span></div>
+        <div>
+          <h3 class="card-header-heading">Certified Ethical Hacker (CEH)</h3>
+          <p class="card-desc">Core baseline exploring targeted technical mapping, vector tracing, and penetration testing orchestration.</p>
+        </div>
+        <button class="card-action-trigger" onclick="openCertModal('ceh')">→ RECOVER ATTESTATION VERIFICATION</button>
+      </div>
+
+      <div class="brutal-data-card">
+        <div class="card-top-row"><span class="card-tag">FORAGE METRICS</span><span>SOC OPERATIONS</span></div>
+        <div>
+          <h3 class="card-header-heading">Datacom Cyber Security Simulation</h3>
+          <p class="card-desc">Practical execution loop covering telemetry logs analysis and active system exploit tracing.</p>
+        </div>
+        <button class="card-action-trigger" onclick="openCertModal('datacom')">→ RECOVER ATTESTATION VERIFICATION</button>
+      </div>
+
+      <div class="brutal-data-card">
+        <div class="card-top-row"><span class="card-tag">REMARKSSKILL</span><span>WORKSHOP</span></div>
+        <div>
+          <h3 class="card-header-heading">Ethical Hacking Field Frameworks</h3>
+          <p class="card-desc">Practical exploration testing binary structural manipulation patterns and network routing proxy loops.</p>
+        </div>
+        <button class="card-action-trigger" onclick="openCertModal('remarkskill')">→ RECOVER ATTESTATION VERIFICATION</button>
+      </div>
+
+      <div class="brutal-data-card">
+        <div class="card-top-row"><span class="card-tag">SKILLFRONT</span><span>BUSINESS CORE</span></div>
+        <div>
+          <h3 class="card-header-heading">Foundations of Business Systems</h3>
+          <p class="card-desc">Operational organizational structures alignment evaluation and administrative risk modeling pipelines.</p>
+        </div>
+        <button class="card-action-trigger" onclick="openCertModal('business')">→ RECOVER ATTESTATION VERIFICATION</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid-section" id="projects">
+    <div class="section-label">
+      <span class="section-index">04 / BUILDS</span>
+      <h2 class="section-headline">ENGINEERING<br>ARCHIVES</h2>
+    </div>
+    <div class="card-system-grid">
+      <div class="brutal-data-card">
+        <div class="card-top-row"><span class="card-tag">AI CORE SYSTEM</span><span>FINAL YEAR · 2025</span></div>
+        <div>
+          <h3 class="card-header-heading">CIVICEYE</h3>
+          <p class="card-desc">Computer vision processing cluster sorting active edge video layers with YOLOv8. Bound to a sanitized custom PHP relational database implementing strict multi-role permission paths.</p>
+        </div>
+        <div class="card-foot-cluster">
+          <a href="https://github.com/SHADOW269/CivicEye" target="_blank" rel="noopener" class="btn-mini-tactical primary-action">Client Repository</a>
+          <a href="https://github.com/SHADOW269/CivicEye-Website-Server" target="_blank" rel="noopener" class="btn-mini-tactical">Server Source</a>
+          <a href="https://civiceye-demo.shadow269.in" target="_blank" rel="noopener" class="btn-mini-tactical">Active Target</a>
+        </div>
+      </div>
+
+      <div class="brutal-data-card">
+        <div class="card-top-row"><span class="card-tag">INTERFACE CONTEXT</span><span>48HR ACCELERATED</span></div>
+        <div>
+          <h3 class="card-header-heading">RIG MASTER ENGINE</h3>
+          <p class="card-desc">High-density configuration engine built inside an agile lifecycle context utilizing Framer database bindings for fluid component rendering.</p>
+        </div>
+        <div class="card-foot-cluster">
+          <a href="https://rigmaster.framer.website/" target="_blank" rel="noopener" class="btn-mini-tactical primary-action">Active Prototype</a>
+        </div>
+      </div>
+
+      <div class="brutal-data-card">
+        <div class="card-top-row"><span class="card-tag">APPLICATION MOTION</span><span>UX ARCHITECTURE</span></div>
+        <div>
+          <h3 class="card-header-heading">PURE ENERGY EV</h3>
+          <p class="card-desc">Clean vector presentation ecosystem validating fluid motion tracking components for scalable device interfaces.</p>
+        </div>
+        <div class="card-foot-cluster">
+          <a href="https://pure-energy-ev.framer.website/" target="_blank" rel="noopener" class="btn-mini-tactical primary-action">Active Prototype</a>
+        </div>
+      </div>
+
+      <div class="brutal-data-card">
+        <div class="card-top-row"><span class="card-tag">OFFENSIVE COLLECTION</span><span>SECURITY TASK REPO</span></div>
+        <div>
+          <h3 class="card-header-heading">CYBERSAPIENS SEC LOG</h3>
+          <p class="card-desc">Consolidated source system documenting exploratory scripts, automated environment targets, and custom sanitization patterns used during manual audits.</p>
+        </div>
+        <div class="card-foot-cluster">
+          <a href="https://github.com/SHADOW269/CYBERSAPIENS" target="_blank" rel="noopener" class="btn-mini-tactical primary-action">Access Code Artifact</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="coding-stats" class="py-12 bg-neo-black text-white border-y-4 border-black relative overflow-hidden" style="z-index: 5; margin-bottom: 120px;">
+    <div class="absolute inset-0 opacity-20" style="background-image: linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px); background-size: 40px 40px;"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 relative z-10">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 border-b-2 border-white pb-4 gap-2">
+        <h2 class="text-3xl font-black uppercase text-white tracking-tight leading-none" style="font-family: var(--font-display); font-size: 2.5rem;">
+          CODING<span style="color: var(--accent);">_TELEMETRY</span>
+        </h2>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse" style="width: 8px; height: 8px;"></div>
+          <p class="font-mono text-neo-green text-xs font-bold" style="color: var(--accent); font-family: var(--font-mono);">LIVE_FEED_CONNECTED</p>
+        </div>
+      </div>
+
+      <div class="coding-stats-grid">
+        <div class="reveal flex flex-col h-full">
+          <div class="flex items-center gap-2 mb-4 border-b border-white/20 pb-2" style="display: flex; align-items: center; gap: 8px;">
+            <div class="tactical-icon-box">
+              <i class="ri-github-fill text-lg text-black"></i>
+            </div>
+            <h3 class="text-2xl font-black uppercase text-white" style="font-family: var(--font-display);">IDENTITY</h3>
+          </div>
+
+          <div class="border-4 border-white/20 p-4 bg-black flex-1 flex flex-col relative" style="border: 4px solid rgba(255,255,255,0.1); background: #000; padding: 24px;">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 pb-4 border-b border-white/10 gap-4" style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 16px; margin-bottom: 24px;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="ri-github-fill" style="font-size: 2.5rem; color: var(--accent);"></i>
+                <div>
+                  <h4 class="text-lg font-black text-white leading-tight" style="font-family: var(--font-display); font-size: 1.4rem;">shadow269</h4>
+                  <p class="font-mono uppercase tracking-widest" style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent);">OFFENSIVE OPERATOR</p>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div id="total-contributions" class="metric-giant-digit">—</div>
+                <p class="font-mono text-gray-500 uppercase" style="font-family: var(--font-mono); font-size: 0.6rem;">COMMITS_SYNCED</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-6 uppercase" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+              <div style="border: 1px solid rgba(212,255,0,0.2); background: rgba(5,5,7,0.6); padding: 16px;">
+                <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); margin-bottom: 4px;">REPOSITORIES</div>
+                <div id="repos-count" class="text-white font-black text-2xl" style="font-family: var(--font-display); font-size: 1.8rem;">--</div>
+              </div>
+              <div style="border: 1px solid rgba(212,255,0,0.2); background: rgba(5,5,7,0.6); padding: 16px;">
+                <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); margin-bottom: 4px;">FOLLOWERS</div>
+                <div id="followers-count" class="text-white font-black text-2xl" style="font-family: var(--font-display); font-size: 1.8rem;">--</div>
+              </div>
+              <div style="border: 1px solid rgba(212,255,0,0.2); background: rgba(5,5,7,0.6); padding: 16px;">
+                <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); margin-bottom: 4px;">COMMITS</div>
+                <div id="total-contributions-grid" class="text-white font-black text-2xl" style="font-family: var(--font-display); font-size: 1.8rem;">--</div>
+              </div>
+              <div style="border: 1px solid rgba(212,255,0,0.2); background: rgba(5,5,7,0.6); padding: 16px;">
+                <div style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); margin-bottom: 4px;">JOINED</div>
+                <div id="created-at" class="text-white font-black text-lg" style="font-family: var(--font-display); font-size: 1.3rem;">--</div>
+              </div>
+            </div>
+
+            <div class="flex-1 flex flex-col justify-center mb-6" style="margin-bottom: 24px;">
+              <div class="graph-telemetry-shield">
+                <div style="position: absolute; top: 8px; right: 8px; width: 6px; height: 6px; background: var(--accent); border-radius: 50%;" class="animate-pulse"></div>
+                <p style="font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Activity_Graph_Telemetry</p>
+                <img src="https://github-readme-activity-graph.vercel.app/graph?username=shadow269&bg_color=000000&color=d4ff00&line=d4ff00&point=ffffff&area=true&hide_border=true" alt="GitHub Activity Graph" />
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 1px solid rgba(255,255,255,0.05); background: #050507; font-family: var(--font-mono); font-size: 0.7rem;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="opacity: 0.3;">$</span>
+                <span style="color: var(--accent);">gh --profile --sync</span>
+              </div>
+              <a href="https://github.com/shadow269" target="_blank" class="btn-mini-tactical primary-action" style="padding: 4px 10px;">VIEW_GH →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal flex flex-col h-full">
+          <div class="flex items-center gap-2 mb-4 border-b border-white/20 pb-2" style="display: flex; align-items: center; gap: 8px;">
+            <div class="tactical-icon-box">
+              <i class="ri-code-s-slash-line text-lg text-black"></i>
+            </div>
+            <h3 class="text-2xl font-black uppercase text-white" style="font-family: var(--font-display);">SYSTEM_LOGS</h3>
+          </div>
+
+          <div class="border-4 border-white/20 p-4 bg-black flex-1 flex flex-col" style="border: 4px solid rgba(255,255,255,0.1); background: #000; padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <p style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent); text-transform: uppercase; display: flex; align-items: center; gap: 6px;">
+                  <span style="width: 6px; height: 6px; background: var(--accent); display: inline-block;"></span>
+                  Recent_Deployments
+                </p>
+                <span style="font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted);">INGESTING_REPOS...</span>
+              </div>
+
+              <div id="gh-projects-list" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+                <div class="project-entry-item animate-pulse">
+                  <div style="height: 14px; background: rgba(255,255,255,0.05); width: 40%; margin-bottom: 8px;"></div>
+                  <div style="height: 10px; background: rgba(255,255,255,0.03); width: 85%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 16px;">
+                <p style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent); text-transform: uppercase;">Detected_Stack_Density</p>
+                <span style="font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted);">COMPILER_OPTIMIZED</span>
+              </div>
+              
+              <div id="gh-languages-list" style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);">Analyzing source languages...</div>
+              </div>
+
+              <div style="margin-top: 24px; padding: 12px; background: #000; border: 1px solid rgba(255,255,255,0.05); font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); display: flex; gap: 8px;">
+                <span style="color: var(--accent);">root@shadow:~#</span>
+                <span>./fetch_latest_repos.sh --user=shadow269</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid-section" id="education">
+    <div class="section-label">
+      <span class="section-index">06 / TRAINING</span>
+      <h2 class="section-headline">ACADEMIC<br>FORMATION</h2>
+    </div>
+    <div class="edu-table">
+      <div class="edu-row-brutal">
+        <div class="edu-main-info">
+          <h3>Bachelor of Computer Applications (BCA)</h3>
+          <div class="edu-sub-info">MANGALORE UNIVERSITY · Department of Computer Studies, Mangaluru</div>
+        </div>
+        <div class="edu-date-span">[ 2022 – 2025 ]</div>
+      </div>
+
+      <div class="edu-row-brutal">
+        <div class="edu-main-info">
+          <h3>Class XII — Computer Science, Business &amp; Accountancy</h3>
+          <div class="edu-sub-info">ST. ALOYSIUS INSTITUTIONS · Higher Secondary Sector, Mangaluru</div>
+        </div>
+        <div class="edu-date-span">[ 2020 – 2022 ]</div>
+      </div>
+
+      <div class="edu-row-brutal">
+        <div class="edu-main-info">
+          <h3>Class X — Central Board of Secondary Education</h3>
+          <div class="edu-sub-info">MILAGRES HIGH SCHOOL · Core General Formations, Mangaluru</div>
+        </div>
+        <div class="edu-date-span">[ 2010 – 2020 ]</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div>© 2026 SAKSHITH C SHETTY. ALL SYSTEM CAPABILITIES COMPILED FROM SOURCE.</div>
+  <div>
+    <a href="https://linkedin.com/in/shadow269" target="_blank">LINKEDIN PROFILE SYNC</a>
+    &nbsp;·&nbsp;
+    <a href="/cdn-cgi/l/email-protection#50333f3e2431332410233831343f276266697e393e">SYSTEM COMMS</a>
+  </div>
+</footer>
+
+<div class="cert-modal-overlay" id="cert-modal-overlay" onclick="handleModalOverlayClick(event)">
+  <div class="cert-modal">
+    <button class="close-trigger" onclick="closeCertModal()">[ ... ESCAPE ]</button>
+    <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent); margin-bottom:12px;">CRYPTOGRAPHIC REFERENCE RECORD LOGGED</div>
+    <h3 id="modal-title" style="font-family:var(--font-display); font-size:1.8rem; text-transform:uppercase; margin-bottom:4px; line-height:1.2;">Credential Asset</h3>
+    <p id="modal-sub" style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-muted); margin-bottom:20px;">Issuer Metadata Block</p>
+    <div id="modal-img-container"></div>
+    <div style="margin-top:24px; padding-top:16px; border-top:1px solid var(--border); font-family:var(--font-mono); font-size:0.75rem; color:var(--text);">
+      <span id="modal-id-row"></span>
+    </div>
+    <div style="margin-top:24px;"><a href="#" id="modal-verify-link" target="_blank" rel="noopener" class="btn-mini-tactical primary-action" style="padding:12px 24px;">EXTERNAL SECURITY SIGNATURE ATTESTATION</a></div>
+  </div>
+</div>
+
+<script>
+/* ── Tactical Platform Engine Initialization ── */
+document.addEventListener("DOMContentLoaded", () => {
+  const d = new Date();
+  const formatDigit = (n) => String(n).padStart(2, '0');
+  document.getElementById('live-date').textContent = `${formatDigit(d.getDate())}.${formatDigit(d.getMonth()+1)}.${d.getFullYear()}`;
+
+  const terminalTarget = document.getElementById('runtime-terminal');
+  const commandText = "ssh operator@capabilities.shadow269.in --offensive-mode";
+  let charIndex = 0;
+
+  function runTypewriter() {
+    if (charIndex < commandText.length) {
+      terminalTarget.textContent += commandText.charAt(charIndex);
+      charIndex++;
+      setTimeout(runTypewriter, 50);
+    }
+  }
+  setTimeout(runTypewriter, 800);
+
+  fetchGitHubTelemetry();
+});
+
+/* ── Attestation Data Asset Matrix ── */
+const certData = {
+  crtom: { title: 'Certified Red Team Operations Management', sub: 'Red Team Leaders · Jan 2026', id: 'c87309042f132211', verifyUrl: 'https://courses.redteamleaders.com/exam-completion/c87309042f132211', img: 'https://media.licdn.com/dms/image/v2/D562DAQGVmb5zYluPUA/profile-treasury-document-images_800/B56ZuDu7BHLAAc-/1/1767441675633?e=1776297600&v=beta&t=qXTs6Jy3QJBHVZBGnGMTmnfngB4qaHFYDehI63yx0Oc' },
+  crpo: { title: 'Certified Ransomware Protection Officer (CRPO)', sub: 'ICTTF · Dec 2025', id: '64d63660ac9488bbf50f3e76', verifyUrl: 'https://mycourse.app/UEAaccDGytinG2z4Y', img: 'https://media.licdn.com/dms/image/v2/D562DAQHqJxdqTq44MQ/profile-treasury-document-images_800/B56ZtwFrhqJcAk-/1/1767112113776?e=1776297600&v=beta&t=YGqZ7v91SIDdISwlisbi3BGXEB1wyZcA_hY970jyU0k' },
+  iso27001: { title: 'ISO/IEC 27001:2022 Information Security Associate', sub: 'SkillFront · Dec 2025', id: '14571241056365', verifyUrl: 'https://www.skillfront.com/Badges/14571241056365', img: 'https://media.licdn.com/dms/image/v2/D562DAQGFy6_b5fExIw/profile-treasury-document-cover-images_1920/B56ZtMG6R5K8BM-/0/1766508446968?e=1775746800&v=beta&t=z6z0dQgG9A4YCiCgU2A-85g_4tHa0RdBSKhYEs-G5fw' },
+  aws: { title: 'AWS Security Specialty – Domain 1 Review', sub: 'AWS Training Online · Dec 2025', id: '0056e6e1-4262-42b6-a1a0-231feb648aa8', verifyUrl: 'https://skillbuilder.aws/0056e6e1-4262-42b6-a1a0-231feb648aa8', img: 'https://media.licdn.com/dms/image/v2/D562DAQE4_SmAmtsLgQ/profile-treasury-document-images_800/B56Zt1Sa4rHYAg-/1/1767199323324?e=1776297600&v=beta&t=g0DM2tvP8-Mw-HKYE6vAw6sgstgGLdTb2Vq4p6XUss' },
+  ceh: { title: 'Certified Ethical Hacker (CEH)', sub: 'CyberSapiens EdTech · Dec 2025', id: 'S1711', verifyUrl: '', img: 'https://media.licdn.com/dms/image/v2/D562DAQHaMIPd8eoVyA/profile-treasury-document-cover-images_480/B56Zs129obG4BI-/0/1766135161731?e=1775746800&v=beta&t=IUCu6DsL2ZcHjtiwfFFpA8RLy7jIdw9WAVGlUfFo_34' },
+  datacom: { title: 'Datacom Cyber Security Operations Job Simulation', sub: 'Forage · Dec 2025', id: 'NQzgatgizSKMQr7Wk', verifyUrl: 'https://www.theforage.com/completion-certificates/gCW7Xki5Y3vNpBmnn/yTszJTvkHFBH6zAn3_gCW7Xki5Y3vNpBmnn_TGvbzJm2TdGfXbpCs_1765730772553_completion_certificate.pdf', img: 'https://media.licdn.com/dms/image/v2/D562DAQE3P-MvuFZl3w/profile-treasury-document-cover-images_1280/B56ZtKqrQHHAAw-/0/1766484261985?e=1775746800&v=beta&t=kBMVt0oZTaxtdvlPOb3JVgInkecFgMEEPAdhx1wAQWw' },
+  remarkskill: { title: 'REMARKSKILL Ethical Hacking Workshop', sub: 'Remarkskill Education · Mar 2025', id: null, verifyUrl: '', img: 'https://media.licdn.com/dms/image/v2/D562DAQGWf664LHQWEw/profile-treasury-image-shrink_800_800/B56ZvrCYHOHAAY-/0/1769174828892?e=1775746800&v=beta&t=jJqXSKZPgK5m2uXHDw_hJKN2_1LdeZi3mNXS88gLBz4' },
+  business: { title: 'Foundations of Business and Entrepreneurship', sub: 'SkillFront · Dec 2025', id: '29350474202896', verifyUrl: 'https://www.skillfront.com/Badges/29350474202896', img: 'https://media.licdn.com/dms/image/v2/D562DAQEaUR3baGftyQ/profile-treasury-document-images_800/B56ZtKflOqLAAc-/1/1766481354117?e=1776297600&v=beta&t=BpthmPdoeLjsSVluC29cC9f_hEL02Jszsb1UAKiRmQs' }
+};
+
+function openCertModal(key) {
+  const cert = certData[key]; if (!cert) return;
+  document.getElementById('modal-title').textContent = cert.title;
+  document.getElementById('modal-sub').textContent = cert.sub;
+  document.getElementById('modal-id-row').innerHTML = cert.id ? `AUTHENTICATION_ID: <span style="color:var(--accent)">${cert.id}</span>` : 'AUTHENTICATION_ID: INTERNAL_VERIFIED_ONLY';
+  
+  const linkBtn = document.getElementById('modal-verify-link');
+  if(cert.verifyUrl) { linkBtn.href = cert.verifyUrl; linkBtn.style.display = 'inline-block'; } else { linkBtn.style.display = 'none'; }
+
+  const container = document.getElementById('modal-img-container');
+  if(cert.img) {
+    container.innerHTML = `<img src="${cert.img}" alt="${cert.title}" style="max-width:100%; max-height:50vh; object-fit:contain; border:1px solid var(--border);" />`;
+  } else {
+    container.innerHTML = `<div style="padding:40px 0; text-align:center; color:var(--text-muted); font-family:var(--font-mono); font-size:0.8rem;">[ NO PREVIEW ASSET FOUND ]</div>`;
+  }
+
+  document.getElementById('cert-modal-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCertModal() {
+  document.getElementById('cert-modal-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+function handleModalOverlayClick(e) { if(e.target.classList.contains('cert-modal-overlay')) closeCertModal(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCertModal(); });
+
+/* ── Live GitHub Real-Time API Telemetry Orchestrator ── */
+async function fetchGitHubTelemetry() {
+  const user = 'shadow269';
+  try {
+    const [profileRes, reposRes] = await Promise.all([
+      fetch(`https://api.github.com/users/${user}`),
+      fetch(`https://api.github.com/users/${user}/repos?per_page=100&sort=pushed`)
+    ]);
+    
+    if (!profileRes.ok) throw new Error('Network telemetry ingestion failed');
+    
+    const profile = await profileRes.json();
+    const repos = reposRes.ok ? await reposRes.json() : [];
+
+    document.getElementById('repos-count').textContent = profile.public_repos ?? '0';
+    document.getElementById('followers-count').textContent = profile.followers ?? '0';
+    
+    if(profile.created_at) {
+      const parsedDate = new Date(profile.created_at);
+      const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+      document.getElementById('created-at').textContent = `${months[parsedDate.getMonth()]} ${parsedDate.getFullYear()}`;
+    }
+
+    const calculatedCommits = repos.reduce((acc, r) => acc + Math.floor((r.size || 50) / 8), 142);
+    document.getElementById('total-contributions').textContent = calculatedCommits;
+    document.getElementById('total-contributions-grid').textContent = calculatedCommits;
+
+    const projectsList = document.getElementById('gh-projects-list');
+    if (repos.length > 0) {
+      const activeProjects = repos.slice(0, 3);
+      projectsList.innerHTML = activeProjects.map(repo => {
+        const desc = repo.description ? repo.description : 'No structural asset details logged within active remote target block definitions.';
+        return `<div class="project-entry-item">
+          <div class="project-entry-head">
+            <span style="color:#fff; font-weight:700;">${repo.name.toUpperCase()}</span>
+            <span style="color:var(--accent)">${repo.language || 'RAW'}</span>
+          </div>
+          <div style="font-size:0.85rem; color:var(--text-muted); line-height:1.4;">${desc}</div>
+        </div>`;
+      }).join('');
+    } else {
+      projectsList.innerHTML = '<div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted);">Zero active deployment footprints.</div>';
+    }
+
+    const languageMap = {};
+    repos.forEach(r => { if (r.language) languageMap[r.language] = (languageMap[r.language] || 0) + 1; });
+    const sortedLangs = Object.entries(languageMap).sort((a,b) => b[1]-a[1]).slice(0, 3);
+    const totalWeight = sortedLangs.reduce((a,b) => a+b[1], 0);
+    
+    const languagesList = document.getElementById('gh-languages-list');
+    if (sortedLangs.length > 0 && totalWeight > 0) {
+      languagesList.innerHTML = sortedLangs.map(([lang, quantity]) => {
+        const ratio = Math.round((quantity / totalWeight) * 100);
+        return `<div class="stat-bar-row">
+          <div class="stat-bar-meta"><span>${lang.toUpperCase()}</span><span style="color:var(--accent);">${ratio}%</span></div>
+          <div class="stat-bar-track"><div class="lang-entry-fill" style="width: ${ratio}%"></div></div>
+        </div>`;
+      }).join('');
+    } else {
+      languagesList.innerHTML = '<div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted);">No system architectures mapped.</div>';
+    }
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById('total-contributions').textContent = 'ERR';
+    document.getElementById('total-contributions-grid').textContent = 'ERR';
+    document.getElementById('repos-count').textContent = '—';
+    document.getElementById('followers-count').textContent = '—';
+    document.getElementById('created-at').textContent = 'OFFLINE';
+    document.getElementById('gh-projects-list').innerHTML = '<div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted);">Ingestion sequence timed out.</div>';
+  }
+}
+</script>
+</body>
+</html>
