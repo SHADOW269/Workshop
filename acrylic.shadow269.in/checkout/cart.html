@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart | Shop Shadow269</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/checkout.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+  <nav class="nav scrolled" id="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <span class="logo-mark">S</span>
+        <span class="logo-text">Shadow<span class="logo-accent">269</span></span>
+      </a>
+      <ul class="nav-links"></ul>
+      <div class="nav-actions">
+        <a href="/" class="btn btn-ghost btn-sm">Continue Shopping</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="checkout-page">
+    <div class="container">
+      <h1 class="checkout-title">Your Cart</h1>
+
+      <div class="checkout-layout">
+        <div id="cartPageList" class="cart-page-list">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="order-summary">
+          <h3>Order Summary</h3>
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="sumSubtotal">₹0</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span class="free-tag">Free</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span id="sumTotal">₹0</span>
+          </div>
+
+          <form class="checkout-form" id="checkoutForm">
+            <div class="form-field">
+              <label for="custName">Full Name</label>
+              <input type="text" id="custName" required placeholder="Your name" />
+            </div>
+            <div class="form-field">
+              <label for="custEmail">Email</label>
+              <input type="email" id="custEmail" required placeholder="you@example.com" />
+            </div>
+            <div class="form-field">
+              <label for="custPhone">Phone Number</label>
+              <input type="tel" id="custPhone" required placeholder="+91 98765 43210" />
+            </div>
+            <div class="form-field">
+              <label for="custAddress">Shipping Address</label>
+              <input type="text" id="custAddress" required placeholder="House no, street, area" />
+            </div>
+            <div class="form-row-2">
+              <div class="form-field">
+                <label for="custCity">City</label>
+                <input type="text" id="custCity" required placeholder="City" />
+              </div>
+              <div class="form-field">
+                <label for="custPincode">Pincode</label>
+                <input type="text" id="custPincode" required placeholder="000000" />
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary pay-btn" id="payBtn">
+              Pay with Razorpay →
+            </button>
+            <div class="secure-note">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Payments secured by Razorpay
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="../js/cart.js"></script>
+  <script src="../js/razorpay.js"></script>
+  <script>
+    function renderCartPage() {
+      const listEl = document.getElementById('cartPageList');
+      const cartData = JSON.parse(localStorage.getItem('shadow269_cart') || '[]');
+
+      if (cartData.length === 0) {
+        listEl.innerHTML = `
+          <div class="empty-cart-state">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            <h3>Your cart is empty</h3>
+            <p>Add the Acrylic 3-in-1 Cover to get started.</p>
+            <a href="/products/acrylic-3-in-1-cover.html" class="btn btn-primary">Shop Now</a>
+          </div>
+        `;
+        document.getElementById('payBtn').disabled = true;
+        updateSummary(0);
+        return;
+      }
+
+      listEl.innerHTML = cartData.map((item, i) => `
+        <div class="cart-page-row">
+          <div class="cart-page-thumb"></div>
+          <div class="cart-page-info">
+            <h4>${item.name}</h4>
+            <span>Qty: ${item.qty} × ₹${item.price.toLocaleString('en-IN')}</span>
+          </div>
+          <div class="cart-page-price">₹${(item.price * item.qty).toLocaleString('en-IN')}</div>
+          <button class="cart-page-remove" data-index="${i}" aria-label="Remove item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0l-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 6"/></svg>
+          </button>
+        </div>
+      `).join('');
+
+      listEl.querySelectorAll('.cart-page-remove').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.index);
+          cartData.splice(idx, 1);
+          localStorage.setItem('shadow269_cart', JSON.stringify(cartData));
+          renderCartPage();
+        });
+      });
+
+      const total = cartData.reduce((sum, i) => sum + i.price * i.qty, 0);
+      document.getElementById('payBtn').disabled = false;
+      updateSummary(total);
+    }
+
+    function updateSummary(total) {
+      document.getElementById('sumSubtotal').textContent = '₹' + total.toLocaleString('en-IN');
+      document.getElementById('sumTotal').textContent = '₹' + total.toLocaleString('en-IN');
+    }
+
+    document.getElementById('checkoutForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const cartData = JSON.parse(localStorage.getItem('shadow269_cart') || '[]');
+      if (cartData.length === 0) return;
+
+      const total = cartData.reduce((sum, i) => sum + i.price * i.qty, 0);
+      const customerInfo = {
+        name: document.getElementById('custName').value,
+        email: document.getElementById('custEmail').value,
+        phone: document.getElementById('custPhone').value
+      };
+
+      window.initiateRazorpayCheckout(total, customerInfo);
+    });
+
+    renderCartPage();
+  </script>
+</body>
+</html>

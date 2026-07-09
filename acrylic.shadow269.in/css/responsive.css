@@ -1,0 +1,169 @@
+/* ===== RESPONSIVE — SHOP SHADOW269 ===== */
+
+/* 1440px+ — Wide screens */
+@media (min-width: 1440px) {
+  .hero { max-width: 1400px; }
+  h1 { font-size: 6rem; }
+}
+
+/* 1024px — Laptop */
+@media (max-width: 1024px) {
+  .hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 8rem 1.5rem 5rem;
+    gap: 3rem;
+  }
+
+  .hero-content { padding-right: 0; }
+
+  .hero-sub { margin: 0 auto 2.5rem; }
+
+  .hero-cta { justify-content: center; }
+
+  .hero-trust { justify-content: center; }
+
+  .hero-visual { order: -1; }
+
+  .scroll-indicator { grid-column: 1; }
+
+  .problems-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .why-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .sizes-grid { grid-template-columns: repeat(3, 1fr); }
+
+  .size-card:first-child { grid-column: 1 / -1; }
+
+  .feature-panel { grid-template-columns: 1fr; gap: 2.5rem; }
+
+  .panel-visual { order: -1; }
+
+  .specs-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+
+  .footer-brand { grid-column: 1 / -1; }
+
+  /* Product page */
+  .product-layout { grid-template-columns: 1fr; }
+
+  .product-gallery { position: static; }
+}
+
+/* 768px — Tablet */
+@media (max-width: 768px) {
+  h1 { font-size: clamp(2.4rem, 9vw, 3.5rem); }
+  h2 { font-size: clamp(1.8rem, 6vw, 2.6rem); }
+
+  section { padding: 4rem 0; }
+
+  .nav-links { display: none; }
+
+  .hamburger { display: flex; }
+
+  .hero { padding: 7rem 1.25rem 4rem; }
+
+  .acrylic-card { width: 300px; height: 220px; }
+
+  .float-tag { font-size: 0.7rem; padding: 0.35rem 0.7rem; }
+
+  .float-tag-2 { left: -10px; }
+
+  .float-tag-1 { right: 0; }
+
+  .problems-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .why-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .reviews-grid { grid-template-columns: 1fr; }
+
+  .sizes-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .size-card:first-child { grid-column: 1 / -1; }
+
+  .solution-card { padding: 2.5rem 1.5rem; }
+
+  .cta-card { padding: 3rem 1.5rem; }
+
+  .feature-tabs { gap: 0.5rem; }
+
+  .feature-tab { padding: 0.6rem 1rem; }
+
+  .tab-num { display: none; }
+
+  .mode-demo { width: 100%; max-width: 340px; height: 220px; }
+
+  .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+
+  .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+
+  /* Cart drawer */
+  .cart-drawer { width: 100%; }
+
+  /* Checkout */
+  .checkout-layout { grid-template-columns: 1fr; }
+
+  .order-summary { order: -1; }
+}
+
+/* 480px — Mobile */
+@media (max-width: 480px) {
+  h1 { font-size: 2.4rem; }
+  h2 { font-size: 1.8rem; }
+
+  .btn-lg { padding: 0.875rem 1.75rem; font-size: 0.95rem; }
+
+  .hero { padding: 6.5rem 1rem 3.5rem; }
+
+  .hero-cta { flex-direction: column; align-items: center; }
+
+  .hero-cta .btn { width: 100%; justify-content: center; }
+
+  .acrylic-card { width: 260px; height: 190px; }
+
+  .float-tag-2 { display: none; }
+
+  .problems-grid { grid-template-columns: 1fr; }
+
+  .why-grid { grid-template-columns: 1fr; }
+
+  .sizes-grid { grid-template-columns: 1fr 1fr; }
+
+  .feature-tabs { flex-direction: column; gap: 0.4rem; }
+
+  .feature-tab { border-radius: 12px; justify-content: flex-start; }
+
+  .specs-layout { gap: 2rem; }
+
+  .spec-row { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+
+  .spec-val { text-align: left; }
+
+  .faq-list { max-width: 100%; }
+
+  .product-thumbs { grid-template-columns: repeat(4, 1fr); }
+
+  .nav-actions .btn-primary.btn-sm { display: none; }
+
+  section { padding: 3rem 0; }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .fade-in, .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .product-float, .hero-orb-1, .hero-orb-2,
+  .float-tag-1, .float-tag-2, .float-tag-3 {
+    animation: none !important;
+  }
+}

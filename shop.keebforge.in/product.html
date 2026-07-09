@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Corne Choc Wireless — KeebForge.in</title>
+  <meta name="description" content="Configure and buy the hand-built Corne Choc Wireless custom low-profile split keyboard." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  
+  <!-- Official Razorpay Checkout Script Integration -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+
+  <style>
+/* ══════════════════════════════════════════════
+   ROOT & VARIABLES (Exact theme match)
+══════════════════════════════════════════════ */
+:root {
+  --black:      #060608;
+  --bg:         #080a0c;
+  --bg1:        #0d0f12;
+  --bg2:        #12151a;
+  --bg3:        #191d24;
+  --surf:       rgba(255,255,255,0.038);
+  --surf-h:     rgba(255,255,255,0.065);
+  --bdr:        rgba(255,255,255,0.07);
+  --bdr-h:      rgba(255,255,255,0.14);
+  --t1:         #f0f0f5;
+  --t2:         #9a9aa8;
+  --t3:         #5a5a68;
+  --acc:        #d4f700;
+  --acc-glow:   rgba(212,247,0,0.22);
+  --acc-glow2:  rgba(212,247,0,0.06);
+  --ff-display: 'Syne', sans-serif;
+  --ff-body:    'Outfit', sans-serif;
+  --nav-h:      56px;
+  --max-w:      1160px;
+  --pad-x:      clamp(20px, 5vw, 48px);
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+  --r-sm: 10px;
+  --r-md: 16px;
+  --shadow-card:
+    0 0 0 1px rgba(255,255,255,0.055),
+    0 1px 0 0 rgba(255,255,255,0.08) inset,
+    0 20px 60px rgba(0,0,0,0.55);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--t1);
+  font-family: var(--ff-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  padding-top: calc(var(--nav-h) + 40px);
+}
+a { text-decoration: none; color: inherit; }
+
+/* ══════════════════════════════════════════════
+   NAVIGATION BACKUP BAR
+══════════════════════════════════════════════ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0; height: var(--nav-h); z-index: 500;
+  background: rgba(6,6,8,0.75); backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--bdr);
+}
+.nav-inner { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--pad-x); height: 100%; display: flex; align-items: center; }
+.nav-logo { font-family: var(--ff-display); font-size: 0.97rem; font-weight: 800; }
+.logo-dot { color: var(--acc); }
+
+/* ══════════════════════════════════════════════
+   PRODUCT LAYOUT VIEWPORT
+══════════════════════════════════════════════ */
+.prod-viewport {
+  max-width: var(--max-w); margin: 0 auto; padding: 0 var(--pad-x) 100px;
+  display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px;
+}
+
+/* Left Column Gallery Display */
+.prod-media-sticky { position: sticky; top: calc(var(--nav-h) + 40px); }
+.main-preview-frame {
+  width: 100%; aspect-ratio: 16/11; background: var(--bg1);
+  border: 1px solid var(--bdr); border-radius: var(--r-md); overflow: hidden;
+}
+.main-preview-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Right Column Purchase Form Controls */
+.prod-config-panel {}
+.prod-header-meta { margin-bottom: 24px; }
+.prod-title-display { font-family: var(--ff-display); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.02em; }
+.price-tag-large { font-family: var(--ff-display); font-size: 1.8rem; font-weight: 800; color: var(--acc); text-shadow: 0 0 30px var(--acc-glow); }
+.price-tag-large span { font-size: 0.8rem; color: var(--t3); font-family: var(--ff-body); font-weight: 400; letter-spacing: 0; text-shadow: none; }
+
+.divider { height: 1px; background: var(--bdr); margin: 24px 0; }
+
+/* Option Config Selectors */
+.config-group { margin-bottom: 24px; }
+.config-label { display: block; font-family: var(--ff-display); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--t3); margin-bottom: 10px; }
+.options-pill-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+.option-pill {
+  background: var(--bg1); border: 1px solid var(--bdr); border-radius: var(--r-sm);
+  padding: 12px 18px; font-size: 0.88rem; color: var(--t2); cursor: pointer; transition: all 0.2s;
+}
+.option-pill:hover { border-color: var(--bdr-h); color: var(--t1); }
+.option-pill.active { border-color: var(--acc); color: var(--t1); background: var(--surf); box-shadow: 0 0 14px var(--acc-glow2); }
+
+/* Payment Input Fields */
+.customer-info-box { background: var(--surf); border: 1px solid var(--bdr); border-radius: var(--r-sm); padding: 18px; margin-bottom: 24px; }
+.input-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+.input-row:last-child { margin-bottom: 0; }
+.input-row label { font-family: var(--ff-display); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--t3); }
+.input-row input {
+  background: var(--bg2); border: 1px solid var(--bdr); border-radius: 6px;
+  color: var(--t1); font-family: var(--ff-body); font-size: 0.85rem; padding: 10px 14px; outline: none;
+}
+.input-row input:focus { border-color: rgba(212,247,0,0.4); }
+
+/* Razorpay Action Triggers */
+.btn-checkout {
+  display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+  font-family: var(--ff-display); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+  color: #000; background: var(--acc); padding: 14px 28px; border: none; border-radius: 99px; cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s; margin-top: 10px;
+}
+.btn-checkout:hover { transform: translateY(-2px); box-shadow: 0 0 32px var(--acc-glow); }
+
+@media (max-width: 850px) {
+  .prod-viewport { grid-template-columns: 1fr; gap: 32px; }
+  .prod-media-sticky { position: static; }
+}
+  </style>
+</head>
+<body>
+
+  <!-- NAV BAR HEADERS -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <span>KeebForge</span><span class="logo-dot">.</span><span>shop</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- WORKSPACE SELECTION VIEWPORT -->
+  <main class="prod-viewport">
+    
+    <!-- Left Sticky Viewport Image Frame -->
+    <section class="prod-media-sticky">
+      <div class="main-preview-frame">
+        <img src="/assets/sample-images/sample-03.jpg" alt="Corne Choc Layout Custom Configuration Preview Image" />
+      </div>
+    </section>
+
+    <!-- Right Custom Config Options Interface -->
+    <section class="prod-config-panel">
+      <div class="prod-header-meta">
+        <h1 class="prod-title-display">Corne Choc Split Variant</h1>
+        <div class="price-tag-large" id="computed-price-display">₹12,999 <span>INR (Inc. Free Pan-India Delivery)</span></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Config Segment 01: Connectivity Type -->
+      <div class="config-group">
+        <span class="config-label">Connectivity Logic</span>
+        <div class="options-pill-grid">
+          <div class="option-pill active" onclick="updateSelection(this, 'connectivity', 0)">Bluetooth Wireless (+₹2,000)</div>
+          <div class="option-pill" onclick="updateSelection(this, 'connectivity', -2000)">Direct Wired Base</div>
+        </div>
+      </div>
+
+      <!-- Config Segment 02: Switch Mechanics -->
+      <div class="config-group">
+        <span class="config-label">Switch Base Package</span>
+        <div class="options-pill-grid">
+          <div class="option-pill active" onclick="updateSelection(this, 'switches', 0)">Kailh Choc Red (Linear)</div>
+          <div class="option-pill" onclick="updateSelection(this, 'switches', 500)">Kailh Choc Brown (Tactile)</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Secure User Meta Delivery Inputs -->
+      <div class="config-group">
+        <span class="config-label">Shipping &amp; Account Identity</span>
+        <div class="customer-info-box">
+          <div class="input-row">
+            <label for="cust-name">Full Name</label>
+            <input type="text" id="cust-name" placeholder="John Doe" required />
+          </div>
+          <div class="input-row">
+            <label for="cust-email">Email Address</label>
+            <input type="email" id="cust-email" placeholder="john@example.com" required />
+          </div>
+          <div class="input-row">
+            <label for="cust-phone">Mobile Number</label>
+            <input type="tel" id="cust-phone" placeholder="9876543210" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- Gate Execution Click Interface Button -->
+      <button class="btn-checkout" id="razorpay-trigger" onclick="initiatePayment()">
+        Proceed to Secure Checkout
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </section>
+  </main>
+
+  <!-- COMPONENT LOGIC HANDLING SCRIPT MATRIX -->
+  <script>
+    let baseValue = 12999;
+    let connectivityMod = 0;
+    let switchMod = 0;
+
+    function updateSelection(element, groupKey, modifierValue) {
+      // Toggle visual active selectors across active target groupings
+      const siblings = element.parentNode.children;
+      for (let i = 0; i < siblings.length; i++) {
+        siblings[i].classList.remove('active');
+      }
+      element.classList.add('active');
+
+      // Recompute configuration prices balances dynamically
+      if (groupKey === 'connectivity') connectivityMod = modifierValue;
+      if (groupKey === 'switches') switchMod = modifierValue;
+      
+      const totalCost = baseValue + connectivityMod + switchMod;
+      document.getElementById('computed-price-display').innerHTML = `₹${totalCost.toLocaleString('en-IN')} <span>INR (Inc. Free Pan-India Delivery)</span>`;
+    }
+
+    /* ══════════════════════════════════════════
+       RAZORPAY GATEWAY RUNTIME CHECKOUT EXECUTION
+    ══════════════════════════════════════════ */
+    function initiatePayment() {
+      const uName  = document.getElementById('cust-name').value;
+      const uEmail = document.getElementById('cust-email').value;
+      const uPhone = document.getElementById('cust-phone').value;
+
+      if (!uName || !uEmail || !uPhone) {
+        alert('Please complete all Shipping Contact details fields before checking out.');
+        return;
+      }
+
+      const totalCost = baseValue + connectivityMod + switchMod;
+
+      // Configuration Object following official standard payload structure specs
+      const paymentOptions = {
+        "key": "YOUR_RAZORPAY_KEY_ID", // Change this to your live production/test key from Razorpay dashboard
+        "amount": totalCost * 100, // Converts flat rupees metrics directly down into paisa integers
+        "currency": "INR",
+        "name": "KeebForge.in",
+        "description": "Bespoke Custom Split Mechanical Keyboard Assembly",
+        "image": "https://keebforge.in/assets/img/favicon.png",
+        "handler": function (response) {
+          // Actions to execute locally once secure transactional token settles successfully
+          alert(`Payment Successful! Transaction Reference ID: ${response.razorpay_payment_id}`);
+          window.location.href = "https://keebforge.in/thanks/";
+        },
+        "prefill": {
+          "name": uName,
+          "email": uEmail,
+          "contact": uPhone
+        },
+        "theme": {
+          "color": "#080a0c" // Deep background overlay styling match
+        }
+      };
+
+      const razorpayInstance = new Razorpay(paymentOptions);
+      razorpayInstance.open();
+    }
+  </script>
+</body>
+</html>

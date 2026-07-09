@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Confirmed | Shop Shadow269</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/checkout.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+
+  <nav class="nav scrolled" id="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <span class="logo-mark">S</span>
+        <span class="logo-text">Shadow<span class="logo-accent">269</span></span>
+      </a>
+      <ul class="nav-links"></ul>
+      <div class="nav-actions"></div>
+    </div>
+  </nav>
+
+  <section class="success-page">
+    <div class="success-card">
+      <div class="success-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h1 class="success-title">Order Confirmed</h1>
+      <p class="success-sub">Thank you for your purchase. A confirmation has been sent to your email, and your Acrylic 3-in-1 Cover will ship soon.</p>
+
+      <div class="order-detail-box" id="orderDetailBox">
+        <!-- Populated by JS -->
+      </div>
+
+      <div class="success-actions">
+        <a href="/" class="btn btn-ghost">Back to Home</a>
+        <a href="/products/acrylic-3-in-1-cover.html" class="btn btn-primary">Continue Shopping</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const order = JSON.parse(localStorage.getItem('shadow269_last_order') || 'null');
+    const box = document.getElementById('orderDetailBox');
+
+    if (order) {
+      const itemsHtml = (order.items || []).map(i =>
+        `<div class="order-detail-row"><span class="odk">${i.name} × ${i.qty}</span><span class="odv">₹${(i.price * i.qty).toLocaleString('en-IN')}</span></div>`
+      ).join('');
+
+      box.innerHTML = `
+        ${itemsHtml}
+        <div class="order-detail-row"><span class="odk">Payment ID</span><span class="odv">${order.payment_id || '—'}</span></div>
+        <div class="order-detail-row"><span class="odk">Total Paid</span><span class="odv">₹${(order.amount || 0).toLocaleString('en-IN')}</span></div>
+      `;
+    } else {
+      box.innerHTML = `<div class="order-detail-row"><span class="odk">No recent order found.</span></div>`;
+    }
+  </script>
+</body>
+</html>
